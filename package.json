@@ -1,0 +1,29 @@
+{
+    "name": "supersonic-tools",
+    "version": "1.0.0",
+    "description": "Embeddable calculators for landscaping services by Supersonic Landscaping",
+    "main": "index.js",
+    "scripts": {
+        "dev": "echo \"No dev server yet — static hosting only.\"",
+        "build": "echo \"No build step yet — all static files.\"",
+        "lint": "echo \"No linter yet — consider adding ESLint.\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Supersonic-Landscaping/supersonic-tools.git"
+    },
+    "keywords": [
+        "landscaping",
+        "calculator",
+        "embeddable",
+        "supersonic",
+        "lawn-care",
+        "web-widget",
+        "cloudflare-pages"
+    ],
+    "author": "Supersonic Landscaping",
+    "license": "MIT",
+    "dependencies": {
+        "canvas-confetti": "^1.9.3"
+    }
+}
