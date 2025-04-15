@@ -6,15 +6,13 @@ export default defineConfig({
     rollupOptions: {
       input: {
         hedge: './hedge/script.js',
-        lawn: './lawn/script.js',
-        mulch: './mulch/script.js'
+        mowing: './mowing/script.js',
+        mulching: './mulching/script.js'
       },
       output: {
-        // This renames your output files.
-        // For example, the `hedge` entry will output to `public/hedge/hedge-calculator.js`
-        // even though the source was named "script.js".
         entryFileNames: '[name]/[name]-calculator.js'
       }
     }
   }
 });
+
