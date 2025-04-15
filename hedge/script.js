@@ -52,10 +52,11 @@ import confetti from 'canvas-confetti';
             <label>Hedge Height (ft):</label>
             <input type="number" id="htc-height-${i}" placeholder="e.g., 5 or 8">
           </div>
-          <div class="htc-field">
-            <input type="checkbox" id="htc-disposal-${i}">
-            <label for="htc-disposal-${i}">Include debris disposal (add $50)</label>
-          </div>
+          <div class="htc-field inline-disposal">
+  <input type="checkbox" id="htc-disposal-${i}">
+  <label for="htc-disposal-${i}">Include debris disposal (add $50)</label>
+</div>
+
           <button id="htc-calc-${i}" class="button">Calculate</button>
           <div id="htc-results-${i}" class="htc-results">
             <p><strong>Estimated Price:</strong> <span id="htc-price-${i}">—</span></p>
