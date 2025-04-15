@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
-    outDir: 'public',
+    outDir: 'public',  // The directory Cloudflare Pages will serve from
     rollupOptions: {
       input: {
         hedge: './hedge/script.js',
@@ -10,9 +10,10 @@ export default defineConfig({
         mulching: './mulching/script.js'
       },
       output: {
+        // This renames your bundled files inside subfolders in public:
+        // e.g., public/hedge/hedge-calculator.js, public/mowing/mowing-calculator.js, etc.
         entryFileNames: '[name]/[name]-calculator.js'
       }
     }
   }
 });
-
