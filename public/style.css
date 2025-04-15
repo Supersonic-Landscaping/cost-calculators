@@ -1,0 +1,110 @@
+/* ========== Shared Base Styles ========== */
+
+[class$="-widget"] {
+    width: 100%;
+    font-family: inherit;
+    max-width: 100%;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 16px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  
+  [class$="-widget"] h3 {
+    font-size: 1.25em;
+    margin-top: 0;
+    margin-bottom: 16px;
+    color: #333;
+    text-align: left;
+  }
+  
+  [class$="-field"] {
+    margin-bottom: 12px;
+  }
+  
+  [class$="-field"] label {
+    display: block;
+    font-size: 0.9em;
+    margin-bottom: 4px;
+    color: #555;
+  }
+  
+  [class$="-field"] input[type="number"],
+  [class$="-field"] select {
+    width: calc(100% - 12px);
+    padding: 5px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  
+  [class$="-widget"] button {
+    margin-bottom: 12px;
+  }
+  
+  /* ========== Hedge Trimming ========== */
+  
+  .htc-widget .htc-results p {
+    font-size: 16px;
+    text-align: left;
+    margin-top: 32px;
+    color: #333;
+  }
+  
+  .htc-disclaimer,
+  .lmc-disclaimer,
+  .smc-disclaimer {
+    font-size: 12px !important;
+    text-align: left;
+    margin-top: 16px;
+    color: #888;
+  }
+  
+  .htc-credit,
+  .lmc-credit,
+  .smc-credit {
+    font-size: 12px !important;
+    text-align: left;
+    margin-top: 8px;
+    color: #888;
+  }
+  
+  .htc-credit a,
+  .lmc-credit a,
+  .smc-credit a {
+    color: #888;
+  }
+  
+  /* ========== Lawn Mowing Specific IDs ========== */
+  
+  .lmc-widget p#lmc-time,
+  .lmc-widget p#lmc-cost {
+    font-size: 16px;
+    text-align: left;
+    margin-top: 32px;
+    color: #333;
+  }
+  
+  /* ========== Mulch Calculator Specific IDs ========== */
+  
+  .smc-widget p#smc-result,
+  .smc-widget p#smc-cost {
+    font-size: 16px;
+    text-align: left;
+    margin-top: 32px;
+    color: #333;
+  }
+  
+  /* ========== Tooltip (shared between lawn & mulch) ========== */
+  
+  .tooltip {
+    cursor: help !important;
+    border-bottom: 1px dotted #333;
+    font-weight: bold;
+    padding: 0 3px;
+  }
+  
