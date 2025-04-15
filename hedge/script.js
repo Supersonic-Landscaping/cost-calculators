@@ -66,57 +66,61 @@ import confetti from 'canvas-confetti';
         </div>
       `;
   
-      // Attach the calculation event listener.
-      (function(index) {
-        var calcButton = document.getElementById("htc-calc-" + index);
-        calcButton.addEventListener("click", function() {
-          var length = parseFloat(document.getElementById("htc-length-" + index).value);
-          var height = parseFloat(document.getElementById("htc-height-" + index).value);
-          var width  = parseFloat(document.getElementById("htc-width-" + index).value);
-          var priceEl = document.getElementById("htc-price-" + index);
-  
-          // Validate all inputs.
-          if (isNaN(length) || isNaN(height) || isNaN(width) || length <= 0 || height <= 0 || width <= 0) {
-            priceEl.innerText = "Please enter valid dimensions for length, height, and width.";
-            return;
-          }
-  
-          // Determine the per linear foot rate based on hedge height:
-          // - For hedges below 6 ft: $3.00 per linear foot.
-          // - For hedges 6 ft or taller: $5.00 per linear foot.
-          var ratePerFoot = (height >= 6) ? 5.00 : 3.00;
-  
-          // Calculate initial cost based on labor (length * rate).
-          var cost = length * ratePerFoot;
-  
-          // Apply the minimum base fee if the labor cost is lower.
-          if (cost < baseFee) {
-            cost = baseFee;
-          }
-  
-          // Always add the equipment surcharge.
-          cost += equipmentSurcharge;
-  
-          // Adjust cost for unusually thick hedges:
-          // For each additional foot above 4 ft in width, add 10%.
-          if (width > 4) {
-            var extra = width - 4;
-            var multiplier = 1 + (0.10 * extra);
-            cost = cost * multiplier;
-          }
-  
-          // Display the estimated price.
-          priceEl.innerText = "$" + cost.toFixed(2);
-  
-          // Launch confetti to celebrate the calculation
-          confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-          });
-        });
-      })(i);
-    }
-  });
-})();
+// Attach the calculation event listener.
+(function(index) {
+    var calcButton = document.getElementById("htc-calc-" + index);
+    calcButton.addEventListener("click", function() {
+      var length = parseFloat(document.getElementById("htc-length-" + index).value);
+      var height = parseFloat(document.getElementById("htc-height-" + index).value);
+      var width  = parseFloat(document.getElementById("htc-width-" + index).value);
+      var priceEl = document.getElementById("htc-price-" + index);
 
+      // Validate all inputs.
+      if (isNaN(length) || isNaN(height) || isNaN(width) || length <= 0 || height <= 0 || width <= 0) {
+        priceEl.innerText = "Please enter valid dimensions for length, height, and width.";
+        return;
+      }
+
+      // Determine the per linear foot rate based on hedge height:
+      // - For hedges below 6 ft: $3.00 per linear foot.
+      // - For hedges 6 ft or taller: $5.00 per linear foot.
+      var ratePerFoot = (height >= 6) ? 5.00 : 3.00;
+
+      // Calculate initial cost based on labor (length * rate).
+      var cost = length * ratePerFoot;
+
+      // Apply the minimum base fee if the labor cost is lower.
+      if (cost < baseFee) {
+        cost = baseFee;
+      }
+
+      // Always add the equipment surcharge.
+      cost += equipmentSurcharge;
+
+      // Adjust cost for unusually thick hedges:
+      // For each additional foot above 4 ft in width, add 10%.
+      if (width > 4) {
+        var extra = width - 4;
+        var multiplier = 1 + (0.10 * extra);
+        cost = cost * multiplier;
+      }
+
+      // Display the estimated price.
+      priceEl.innerText = "$" + cost.toFixed(2);
+
+      // Calculate the button's center coordinates for confetti origin.
+      var rect = calcButton.getBoundingClientRect();
+      var originX = (rect.left + rect.width / 2) / window.innerWidth;
+      var originY = (rect.top + rect.height / 2) / window.innerHeight;
+
+      // Launch confetti from the button's position.
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { x: originX, y: originY }
+      });
+    });
+  })(i);
+}
+});
+})();

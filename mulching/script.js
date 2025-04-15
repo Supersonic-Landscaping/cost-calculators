@@ -103,14 +103,20 @@ import confetti from 'canvas-confetti';
           resultEl.innerText = volumeCubicYards.toFixed(2) + " cubic yards";
           costEl.innerText = "$" + laborCost.toFixed(2);
           
-          // Trigger confetti to celebrate the calculation.
+          // Calculate the button's center position for confetti origin.
+          var rect = calcButton.getBoundingClientRect();
+          var originX = (rect.left + rect.width / 2) / window.innerWidth;
+          var originY = (rect.top + rect.height / 2) / window.innerHeight;
+          
+          // Launch confetti from the button's center.
           confetti({ 
             particleCount: 100, 
             spread: 70, 
-            origin: { y: 0.6 }
+            origin: { x: originX, y: originY }
           });
         });
       })(i);
     }
   });
 })();
+
