@@ -1,20 +1,23 @@
-# Node
+# Node modules
 node_modules/
 npm-debug.log
 yarn.lock
 package-lock.json
 
-# Vite
+# Vite build artifacts
 dist/
 .vite/
+
+# Output from Vite — ignore built JS files
+public/**/*.js
+!public/style.css
+!public/index.html
 
 # OS junk
 .DS_Store
 Thumbs.db
 
-# Output
-public/*.js
-!public/style.css
-
-# VSCode (if applicable)
+# IDE configs
 .vscode/
+.idea/
+
