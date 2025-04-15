@@ -8,7 +8,6 @@ import confetti from 'canvas-confetti';
     link.href = "/style.css";
     document.head.appendChild(link);
   }
-
   // Wait for the DOM to be fully loaded.
   document.addEventListener("DOMContentLoaded", function() {
     // Get all elements designated to host the mulch calculator widget.

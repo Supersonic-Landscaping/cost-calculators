@@ -2,9 +2,10 @@ import { defineConfig } from 'vite';
 
 export default defineConfig({
   build: {
-    outDir: 'dist', // Remember: use a separate directory so /public isn't overwritten
+    outDir: 'dist',
     rollupOptions: {
-      inlineDynamicImports: true, // <-- This tells Rollup to bundle everything in one file
+      // This option tells Rollup to inline all dynamic imports into a single bundle.
+      inlineDynamicImports: true,
       input: {
         hedge: './hedge/script.js',
         mowing: './mowing/script.js',
@@ -16,4 +17,5 @@ export default defineConfig({
     }
   }
 });
+
 
