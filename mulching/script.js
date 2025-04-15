@@ -2,7 +2,7 @@ import confetti from 'canvas-confetti';
 
 (function() {
   // Load the shared stylesheet from /style.css if it's not already loaded.
-  if (!document.querySelector('link[href="/style.css"]')) {
+  if (!document.querySelector('link[href="style.css"]')) {
     var link = document.createElement("link");
     link.rel = "stylesheet";
     link.href = "style.css";
