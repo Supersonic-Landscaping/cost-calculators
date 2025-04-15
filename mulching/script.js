@@ -1,13 +1,20 @@
 import confetti from 'canvas-confetti';
 
 (function() {
-  // Load the shared stylesheet from /style.css if it's not already loaded.
-  if (!document.querySelector('link[href="https://tools.supersoniclandscaping.com/style.css"]')) {
-    var link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://tools.supersoniclandscaping.com/style.css";
-    document.head.appendChild(link);
-  }
+    // Check if any existing <link> ends with "style.css".
+    var existingLink = document.querySelector('link[href$="style.css"]');
+    // If a link exists but is not our absolute URL, update it.
+    if (existingLink) {
+      if (existingLink.href !== "https://tools.supersoniclandscaping.com/style.css") {
+        existingLink.href = "https://tools.supersoniclandscaping.com/style.css";
+      }
+    } else {
+      // Otherwise, create a new <link> element with the absolute URL.
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://tools.supersoniclandscaping.com/style.css";
+      document.head.appendChild(link);
+    }
   // Wait for the DOM to be fully loaded.
   document.addEventListener("DOMContentLoaded", function() {
     // Get all elements designated to host the mulch calculator widget.

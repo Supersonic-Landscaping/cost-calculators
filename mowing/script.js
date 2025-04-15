@@ -1,13 +1,20 @@
 import confetti from 'canvas-confetti';
 
 (function() {
-  // Load the shared stylesheet from /public/style.css if not already loaded.
-  if (!document.querySelector('link[href="https://tools.supersoniclandscaping.com/style.css"]')) {
-    var link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://tools.supersoniclandscaping.com/style.css";
-    document.head.appendChild(link);
-  }
+    // Check if any existing <link> ends with "style.css".
+    var existingLink = document.querySelector('link[href$="style.css"]');
+    // If a link exists but is not our absolute URL, update it.
+    if (existingLink) {
+      if (existingLink.href !== "https://tools.supersoniclandscaping.com/style.css") {
+        existingLink.href = "https://tools.supersoniclandscaping.com/style.css";
+      }
+    } else {
+      // Otherwise, create a new <link> element with the absolute URL.
+      var link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://tools.supersoniclandscaping.com/style.css";
+      document.head.appendChild(link);
+    }
 
   document.addEventListener("DOMContentLoaded", function() {
     var calculators = document.getElementsByClassName("supersonic-lawnmowing-calculator");
