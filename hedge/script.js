@@ -1,7 +1,7 @@
 import confetti from 'canvas-confetti';
 
 (function() {
-  // Ensure the absolute stylesheet URL is used.
+  // Check for any existing <link> that ends with "style.css"
   var existingLink = document.querySelector('link[href$="style.css"]');
   if (existingLink) {
     if (existingLink.href !== "https://tools.supersoniclandscaping.com/style.css") {
@@ -23,9 +23,8 @@ import confetti from 'canvas-confetti';
       // Set a minimum service fee.
       var minFee = 75;
 
-      // Inject widget HTML.
-      // Note: We now only ask for Hedge Length and Hedge Height.
-      // A disposal checkbox is added to optionally include a fixed fee.
+      // Inject widget HTML: We now only ask for Hedge Length and Hedge Height.
+      // A disposal fee checkbox is provided to optionally add a $50 fee.
       calculators[i].innerHTML = `
         <div class="htc-widget" itemscope itemtype="https://schema.org/WebApplication">
           <meta itemprop="name" content="${titleText}">
@@ -55,13 +54,13 @@ import confetti from 'canvas-confetti';
           </div>
           <div class="htc-field">
             <input type="checkbox" id="htc-disposal-${i}">
-            <label for="htc-disposal-${i}">Include debris disposal (add \$50)</label>
+            <label for="htc-disposal-${i}">Include debris disposal (add $50)</label>
           </div>
           <button id="htc-calc-${i}" class="button">Calculate</button>
           <div id="htc-results-${i}" class="htc-results">
             <p><strong>Estimated Price:</strong> <span id="htc-price-${i}">—</span></p>
           </div>
-          <p class="htc-disclaimer" style="font-size:12px;">*This estimate is for basic trimming. Additional services may incur extra fees.</p>
+          <p class="htc-disclaimer" style="font-size:12px;">*This estimate covers basic hedge trimming costs only.</p>
           <p class="htc-credit">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
         </div>
       `;
@@ -73,38 +72,38 @@ import confetti from 'canvas-confetti';
           var length = parseFloat(document.getElementById("htc-length-" + index).value);
           var height = parseFloat(document.getElementById("htc-height-" + index).value);
           var priceEl = document.getElementById("htc-price-" + index);
-          // Check if disposal checkbox is ticked.
           var disposalChecked = document.getElementById("htc-disposal-" + index).checked;
           var disposalFee = 50;
           
-          // Validate inputs.
+          // Validate the inputs.
           if (isNaN(length) || length <= 0 || isNaN(height) || height <= 0) {
             priceEl.innerText = "Please enter valid hedge length and height.";
             return;
           }
           
-          // Determine rate per foot based on hedge height.
-          // For hedges under 6 ft tall: use ~$3.25/ft; for hedges 6 ft or taller (up to 12 ft): ~$4.50/ft.
+          // Determine the rate per foot:
+          // - For hedges under 6 ft tall, use $3.25/ft.
+          // - For hedges 6 ft or taller, use $4.50/ft.
           var ratePerFoot = (height >= 6) ? 4.50 : 3.25;
-          var baseCost = length * ratePerFoot;
+          var cost = length * ratePerFoot;
           
-          // If disposal is selected, add the fee.
+          // Add disposal fee if selected.
           if (disposalChecked) {
-            baseCost += disposalFee;
+            cost += disposalFee;
           }
           
-          // Enforce a minimum service fee.
-          if (baseCost < minFee) {
-            baseCost = minFee;
+          // Enforce minimum service fee.
+          if (cost < minFee) {
+            cost = minFee;
           }
-  
-          priceEl.innerText = "$" + baseCost.toFixed(2);
-  
-          // Calculate the calculate-button's center as confetti origin.
+          
+          priceEl.innerText = "$" + cost.toFixed(2);
+          
+          // Calculate the button's center position for confetti origin.
           var rect = calcButton.getBoundingClientRect();
           var originX = (rect.left + rect.width / 2) / window.innerWidth;
           var originY = (rect.top + rect.height / 2) / window.innerHeight;
-  
+          
           confetti({
             particleCount: 100,
             spread: 70,
@@ -115,6 +114,3 @@ import confetti from 'canvas-confetti';
     }
   });
 })();
-
-
-
