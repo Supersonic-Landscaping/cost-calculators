@@ -1,21 +1,24 @@
 import { defineConfig } from 'vite';
+import { resolve } from 'path';
 
 export default defineConfig({
   build: {
     outDir: 'dist',
     rollupOptions: {
-      // This option tells Rollup to inline all dynamic imports into a single bundle.
       inlineDynamicImports: true,
       input: {
-        hedge: './hedge/script.js',
-        mowing: './mowing/script.js',
-        mulching: './mulching/script.js'
+        hedge: resolve(__dirname, './hedge/script.js'),
+        mowing: resolve(__dirname, './mowing/script.js'),
+        mulching: resolve(__dirname, './mulching/script.js'),
       },
       output: {
-        entryFileNames: '[name]/[name]-calculator.js'
+        entryFileNames: `[name]/[name]-calculator.[hash].js`, // 🧠 Adds automatic cache-busting hash
+        chunkFileNames: 'chunks/[name]-[hash].js',
+        assetFileNames: 'assets/[name]-[hash].[ext]',
       }
     }
   }
 });
+
 
 
