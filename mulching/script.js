@@ -5,7 +5,7 @@ import confetti from 'canvas-confetti';
   if (!document.querySelector('link[href="/style.css"]')) {
     var link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "/style.css";
+    link.href = "style.css";
     document.head.appendChild(link);
   }
   // Wait for the DOM to be fully loaded.
