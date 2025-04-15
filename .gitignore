@@ -1,0 +1,20 @@
+# Node
+node_modules/
+npm-debug.log
+yarn.lock
+package-lock.json
+
+# Vite
+dist/
+.vite/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Output
+public/*.js
+!public/style.css
+
+# VSCode (if applicable)
+.vscode/
