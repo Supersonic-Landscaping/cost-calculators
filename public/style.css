@@ -107,4 +107,10 @@
     font-weight: bold;
     padding: 0 3px;
   }
-  
+  /* Ensure the disposal field is inline */
+.htc-field.inline-disposal {
+    display: flex;
+    align-items: center;
+    gap: 0.5em; /* Adjust spacing between checkbox and label */
+    white-space: nowrap; /* Prevent wrapping if needed */
+  }
