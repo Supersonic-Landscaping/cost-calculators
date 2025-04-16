@@ -93,9 +93,8 @@ import confetti from 'canvas-confetti';
             cost += disposalFee;
           }
   
-          // Enforce minimum service fee.
-          if (cost < 75) {
-            cost = 75;
+          if (cost < baseFee) {
+            cost = baseFee;
           }
   
           priceEl.innerText = "$" + cost.toFixed(2);
