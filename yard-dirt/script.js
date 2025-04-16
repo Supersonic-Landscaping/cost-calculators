@@ -28,17 +28,14 @@ import confetti from 'canvas-confetti';
   const calcArea = (shape, d) => {
     const π = Math.PI;
     switch (shape) {
-      case 'square':
-        return d.side ** 2;
-      case 'rectangle':
-        return d.length * d.width;
+      case 'square':      return d.side ** 2;
+      case 'rectangle':   return d.length * d.width;
       case 'rect-border': {
         const fullW = d.innerWidth + 2 * d.border;
         const fullL = d.innerLength + 2 * d.border;
         return fullW * fullL - d.innerWidth * d.innerLength;
       }
-      case 'circle':
-        return π * (d.diameter / 2) ** 2;
+      case 'circle':      return π * (d.diameter / 2) ** 2;
       case 'circ-border':
       case 'annulus': {
         const outer = shape === 'annulus'
@@ -52,10 +49,8 @@ import confetti from 'canvas-confetti';
         const s = (a + b + c) / 2;
         return Math.sqrt(s * (s - a) * (s - b) * (s - c));
       }
-      case 'trapezoid':
-        return ((d.a + d.b) / 2) * d.h;
-      default:
-        return NaN;
+      case 'trapezoid':   return ((d.a + d.b) / 2) * d.h;
+      default:            return NaN;
     }
   };
 
@@ -79,7 +74,6 @@ import confetti from 'canvas-confetti';
           </div>
 
           <h3>${title}</h3>
-
           <div class="dirt-field">
             <select id="shape-${idx}" aria-label="Area Shape">
               <option value="">-- Select Shape --</option>
@@ -94,6 +88,8 @@ import confetti from 'canvas-confetti';
             </select>
           </div>
 
+          <!-- ALL YOUR FIELDSETS (one per shape), each with class="dirt-shape-fs" and style="display:none" -->
+          <!-- Example: -->
           <fieldset id="fs-square-${idx}" class="dirt-shape-fs" style="display:none;">
             <legend>Square</legend>
             <input class="dim" data-dim="side" placeholder="Side length">
@@ -106,133 +102,7 @@ import confetti from 'canvas-confetti';
             </select>
             <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
           </fieldset>
-
-          <fieldset id="fs-rectangle-${idx}" class="dirt-shape-fs" style="display:none;">
-            <legend>Rectangle</legend>
-            <input class="dim" data-dim="length" placeholder="Length">
-            <select class="unit" data-dim="length" aria-label="Length unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="width" placeholder="Width">
-            <select class="unit" data-dim="width" aria-label="Width unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="depth" placeholder="Depth">
-            <select class="unit" data-dim="depth" aria-label="Depth unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
-          </fieldset>
-
-          <fieldset id="fs-rect-border-${idx}" class="dirt-shape-fs" style="display:none;">
-            <legend>Rectangle Border</legend>
-            <input class="dim" data-dim="innerLength" placeholder="Inner length">
-            <select class="unit" data-dim="innerLength" aria-label="Inner length unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="innerWidth" placeholder="Inner width">
-            <select class="unit" data-dim="innerWidth" aria-label="Inner width unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="border" placeholder="Border width">
-            <select class="unit" data-dim="border" aria-label="Border width unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="depth" placeholder="Depth">
-            <select class="unit" data-dim="depth" aria-label="Depth unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
-          </fieldset>
-
-          <fieldset id="fs-circle-${idx}" class="dirt-shape-fs" style="display:none;">
-            <legend>Circle</legend>
-            <input class="dim" data-dim="diameter" placeholder="Diameter">
-            <select class="unit" data-dim="diameter" aria-label="Diameter unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="depth" placeholder="Depth">
-            <select class="unit" data-dim="depth" aria-label="Depth unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
-          </fieldset>
-
-          <fieldset id="fs-circ-border-${idx}" class="dirt-shape-fs" style="display:none;">
-            <legend>Circle Border</legend>
-            <input class="dim" data-dim="innerDiameter" placeholder="Inner diameter">
-            <select class="unit" data-dim="innerDiameter" aria-label="Inner diameter unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="border" placeholder="Border width">
-            <select class="unit" data-dim="border" aria-label="Border width unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="depth" placeholder="Depth">
-            <select class="unit" data-dim="depth" aria-label="Depth unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
-          </fieldset>
-
-          <fieldset id="fs-annulus-${idx}" class="dirt-shape-fs" style="display:none;">
-            <legend>Annulus</legend>
-            <input class="dim" data-dim="outerDiameter" placeholder="Outer diameter">
-            <select class="unit" data-dim="outerDiameter" aria-label="Outer diameter unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="innerDiameter" placeholder="Inner diameter">
-            <select class="unit" data-dim="innerDiameter" aria-label="Inner diameter unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="depth" placeholder="Depth">
-            <select class="unit" data-dim="depth" aria-label="Depth unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
-          </fieldset>
-
-          <fieldset id="fs-triangle-${idx}" class="dirt-shape-fs" style="display:none;">
-            <legend>Triangle</legend>
-            <input class="dim" data-dim="a" placeholder="Side a">
-            <select class="unit" data-dim="a" aria-label="Side a unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="b" placeholder="Side b">
-            <select class="unit" data-dim="b" aria-label="Side b unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="c" placeholder="Side c">
-            <select class="unit" data-dim="c" aria-label="Side c unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="depth" placeholder="Depth">
-            <select class="unit" data-dim="depth" aria-label="Depth unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
-          </fieldset>
-
-          <fieldset id="fs-trapezoid-${idx}" class="dirt-shape-fs" style="display:none;">
-            <legend>Trapezoid</legend>
-            <input class="dim" data-dim="a" placeholder="Side a">
-            <select class="unit" data-dim="a" aria-label="Side a unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="b" placeholder="Side b">
-            <select class="unit" data-dim="b" aria-label="Side b unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="h" placeholder="Height h">
-            <select class="unit" data-dim="h" aria-label="Height unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input class="dim" data-dim="depth" placeholder="Depth">
-            <select class="unit" data-dim="depth" aria-label="Depth unit">
-              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-            </select>
-            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
-          </fieldset>
+          <!-- Repeat for rectangle, rect-border, circle, etc… -->
 
           <div class="dirt-field">
             <input type="number" id="price-${idx}" placeholder="Price">
@@ -265,31 +135,35 @@ import confetti from 'canvas-confetti';
         hideAll();
         const sel = shapeSel.value;
         if (sel) {
-          const el = document.getElementById(`fs-${sel}-${idx}`);
-          if (el) el.style.display = 'block';
+          widget.querySelector(`#fs-${sel}-${idx}`).style.display = 'block';
         }
       });
 
-      // calculate on button click
+      // **UPDATED CLICK HANDLER**: only grab inputs inside the *active* fieldset
       document.getElementById(`calc-${idx}`).addEventListener('click', () => {
         const shape = shapeSel.value;
         if (!shape) return alert('Please select a shape.');
 
         let valid = true;
         const dims = {};
-        widget.querySelectorAll('.dim').forEach(inp => {
+
+        // 🔑 only query the visible fieldset for `.dim` inputs
+        const activeFs = widget.querySelector(`#fs-${shape}-${idx}`);
+        activeFs.querySelectorAll('.dim').forEach(inp => {
           const key = inp.dataset.dim;
           const raw = parseFloat(inp.value);
           if (key !== 'quantity') {
             if (isNaN(raw) || raw <= 0) valid = false;
-            const unit = widget.querySelector(`.unit[data-dim="${key}"]`).value;
+            const unit = activeFs.querySelector(`.unit[data-dim="${key}"]`).value;
             dims[key] = toFeet(raw, unit);
           } else {
             dims[key] = raw;
           }
         });
+
         if (!valid) return alert('Please fill all fields correctly.');
 
+        // do the math
         const area  = calcArea(shape, dims);
         const volFt = area * dims.depth * dims.quantity;
         const yd3   = volFt / 27;
@@ -312,11 +186,12 @@ import confetti from 'canvas-confetti';
           particleCount: 100,
           spread: 70,
           origin: {
-            x: (r.left + r.width / 2) / window.innerWidth,
-            y: (r.top + r.height / 2) / window.innerHeight
+            x: (r.left + r.width/2) / window.innerWidth,
+            y: (r.top + r.height/2) / window.innerHeight
           }
         });
       });
     });
   });
 })();
+
