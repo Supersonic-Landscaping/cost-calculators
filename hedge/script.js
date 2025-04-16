@@ -1,7 +1,7 @@
 import confetti from 'canvas-confetti';
 
-(async function() {
-  // Check if a <link> ending with "style.css" exists and ensure it uses the absolute URL.
+(function() {
+  // Ensure the absolute stylesheet URL is used.
   var existingLink = document.querySelector('link[href$="style.css"]');
   if (existingLink) {
     if (existingLink.href !== "https://tools.supersoniclandscaping.com/style.css") {
@@ -14,40 +14,25 @@ import confetti from 'canvas-confetti';
     document.head.appendChild(link);
   }
 
-  // Load the manifest (if available) to get hashed filenames for CSS if needed
-  let manifest = null;
-  try {
-    const resp = await fetch('https://tools.supersoniclandscaping.com/manifest.json');
-    if (resp.ok) {
-      manifest = await resp.json();
-    }
-  } catch (err) {
-    console.warn('Manifest fetch error, proceeding with default CSS URL:', err);
-  }
-
   document.addEventListener("DOMContentLoaded", function() {
     var calculators = document.getElementsByClassName("supersonic-hedgetrimming-calculator");
 
     for (var i = 0; i < calculators.length; i++) {
-      // Get custom title or default.
+      // Retrieve parameters from data attributes.
       var titleText = calculators[i].getAttribute("data-title") || "Hedge Trimming Estimate";
-      // Get the minimum base fee.
       var baseFeeStr = calculators[i].getAttribute("data-base-fee");
       var baseFee = (baseFeeStr && !isNaN(parseFloat(baseFeeStr))) ? parseFloat(baseFeeStr) : 100;
-      
-      // Equipment surcharge is still retrieved as before.
       var equipmentSurchargeStr = calculators[i].getAttribute("data-equipment-surcharge");
       var equipmentSurcharge = (equipmentSurchargeStr && !isNaN(parseFloat(equipmentSurchargeStr))) ? parseFloat(equipmentSurchargeStr) : 50;
+      // NEW: Read the disposal fee, defaulting to $50.
+      var disposalFeeStr = calculators[i].getAttribute("data-disposal-fee");
+      var disposalFee = (disposalFeeStr && !isNaN(parseFloat(disposalFeeStr))) ? parseFloat(disposalFeeStr) : 50;
 
-      // NEW: Get the disposal fee from data-disposal-fee attribute; default to $50 if not provided.
-      var disposalFeeAttr = calculators[i].getAttribute("data-disposal-fee");
-      var disposalFee = (disposalFeeAttr && !isNaN(parseFloat(disposalFeeAttr))) ? parseFloat(disposalFeeAttr) : 50;
-      
-      // Inject the widget HTML with a disposal checkbox.
+      // Inject the widget HTML.
       calculators[i].innerHTML = `
         <div class="htc-widget" itemscope itemtype="https://schema.org/WebApplication">
           <meta itemprop="name" content="${titleText}">
-          <meta itemprop="description" content="Estimate your hedge trimming cost based on hedge length and height.">
+          <meta itemprop="description" content="This tool provides an estimated hedge trimming quote based on hedge dimensions and labor/equipment costs. Note: disposal fees are not included.">
           <meta itemprop="applicationCategory" content="UtilitiesApplication">
           <meta itemprop="operatingSystem" content="All">
           <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
@@ -61,15 +46,16 @@ import confetti from 'canvas-confetti';
   
           <h3>${titleText}</h3>
           <p class="htc-estimate-note" style="font-style: italic; font-size: 0.9em; color: #555; text-align: left; margin-bottom: 18px;">
-            Enter your hedge dimensions to estimate your trimming cost.
+            This is an estimated quote; final pricing may vary.
           </p>
+  
           <div class="htc-field">
             <label>Hedge Length (ft):</label>
-            <input type="number" id="htc-length-${i}" placeholder="e.g., 50">
+            <input type="number" id="htc-length-${i}" placeholder="Enter hedge length">
           </div>
           <div class="htc-field">
             <label>Hedge Height (ft):</label>
-            <input type="number" id="htc-height-${i}" placeholder="e.g., 5 or 8">
+            <input type="number" id="htc-height-${i}" placeholder="Enter hedge height">
           </div>
           <div class="htc-field inline-disposal">
             <input type="checkbox" id="htc-disposal-${i}">
@@ -79,7 +65,7 @@ import confetti from 'canvas-confetti';
           <div id="htc-results-${i}" class="htc-results">
             <p><strong>Estimated Price:</strong> <span id="htc-price-${i}">—</span></p>
           </div>
-          <p class="htc-disclaimer" style="font-size:12px;">*This estimate covers basic hedge trimming costs only.</p>
+          <p class="htc-disclaimer" style="font-size:12px;">*This estimate includes labor and equipment costs. Disposal fees are not included.</p>
           <p class="htc-credit">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
         </div>
       `;
@@ -97,30 +83,27 @@ import confetti from 'canvas-confetti';
             priceEl.innerText = "Please enter valid hedge length and height.";
             return;
           }
-          
-          // Determine the rate per foot:
-          // - Use $3.25/ft for hedges under 6 ft tall.
-          // - Use $4.50/ft for hedges 6 ft or taller.
+  
+          // Rate per foot: $3.25 for hedges under 6 ft; $4.50 for hedges 6 ft or taller.
           var ratePerFoot = (height >= 6) ? 4.50 : 3.25;
           var cost = length * ratePerFoot;
   
-          // Add disposal fee if the checkbox is checked.
+          // Add disposal fee if selected.
           if (disposalChecked) {
             cost += disposalFee;
           }
   
-          // Enforce a minimum service fee of $75.
+          // Enforce minimum service fee.
           if (cost < 75) {
             cost = 75;
           }
-          
+  
           priceEl.innerText = "$" + cost.toFixed(2);
   
-          // Launch confetti from the center of the Calculate button.
           var rect = calcButton.getBoundingClientRect();
           var originX = (rect.left + rect.width / 2) / window.innerWidth;
           var originY = (rect.top + rect.height / 2) / window.innerHeight;
-          
+  
           confetti({
             particleCount: 100,
             spread: 70,
