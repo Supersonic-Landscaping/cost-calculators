@@ -1,29 +1,37 @@
 import confetti from 'canvas-confetti';
 
 (function() {
-    // Check if any existing <link> ends with "style.css".
-    var existingLink = document.querySelector('link[href$="style.css"]');
-    // If a link exists but is not our absolute URL, update it.
-    if (existingLink) {
-      if (existingLink.href !== "https://tools.supersoniclandscaping.com/style.css") {
-        existingLink.href = "https://tools.supersoniclandscaping.com/style.css";
-      }
-    } else {
-      // Otherwise, create a new <link> element with the absolute URL.
-      var link = document.createElement("link");
-      link.rel = "stylesheet";
-      link.href = "https://tools.supersoniclandscaping.com/style.css";
-      document.head.appendChild(link);
+  // Ensure our stylesheet is loaded
+  var existingLink = document.querySelector('link[href$="style.css"]');
+  if (existingLink) {
+    if (existingLink.href !== "https://tools.supersoniclandscaping.com/style.css") {
+      existingLink.href = "https://tools.supersoniclandscaping.com/style.css";
     }
+  } else {
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://tools.supersoniclandscaping.com/style.css";
+    document.head.appendChild(link);
+  }
 
   document.addEventListener("DOMContentLoaded", function() {
     var calculators = document.getElementsByClassName("supersonic-lawnmowing-calculator");
 
+    // Define your cost brackets from the table
+    const COST_BRACKETS = [
+      { maxArea: 5445,  minCost: 29,  maxCost: 50  },
+      { maxArea: 10890, minCost: 41,  maxCost: 65  },
+      { maxArea: 21780, minCost: 55,  maxCost: 88  },
+      { maxArea: 43560, minCost: 102, maxCost: 168 }
+    ];
+
     for (var i = 0; i < calculators.length; i++) {
-      var titleText = calculators[i].getAttribute("data-title") || "Lawn Mowing Estimate";
+      var titleText    = calculators[i].getAttribute("data-title")       || "Lawn Mowing Estimate";
       var laborPriceStr = calculators[i].getAttribute("data-labor-price");
-      var laborPrice = (laborPriceStr && !isNaN(parseFloat(laborPriceStr))) ? parseFloat(laborPriceStr) : 65.0;
-  
+      var laborPrice    = (laborPriceStr && !isNaN(parseFloat(laborPriceStr)))
+                          ? parseFloat(laborPriceStr)
+                          : 65.0;
+
       calculators[i].innerHTML = `
         <div class="lmc-widget" itemscope itemtype="https://schema.org/WebApplication">
           <meta itemprop="name" content="${titleText}">
@@ -38,10 +46,10 @@ import confetti from 'canvas-confetti';
             <meta itemprop="name" content="Supersonic Landscaping">
             <meta itemprop="url" content="https://www.supersoniclandscaping.com/">
           </div>
-  
+
           <h3>${titleText}</h3>
           <p class="lmc-estimate-note" style="font-style: italic; font-size: 0.9em; color: #555; text-align: left; margin-bottom: 18px;">
-            This is an estimated quote; final pricing may vary based on project specifics.<br> 
+            This is an estimated quote; final pricing may vary based on project specifics.<br>
             <strong>Contact us for a final quote.</strong>
           </p>
           <div class="lmc-field">
@@ -67,39 +75,42 @@ import confetti from 'canvas-confetti';
           <p class="lmc-credit">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
         </div>
       `;
-  
+
       (function(index) {
         var calcButton = document.getElementById("lmc-calc-" + index);
         calcButton.addEventListener("click", function() {
-          var area = parseFloat(document.getElementById("lmc-area-" + index).value);
+          var area          = parseFloat(document.getElementById("lmc-area-" + index).value);
           var terrainFactor = parseFloat(document.getElementById("lmc-terrain-" + index).value);
-          var timeEl = document.getElementById("lmc-time-" + index);
-          var costEl = document.getElementById("lmc-cost-" + index);
-  
+          var timeEl        = document.getElementById("lmc-time-" + index);
+          var costEl        = document.getElementById("lmc-cost-" + index);
+
           if (isNaN(area) || area <= 0) {
             timeEl.innerText = "Please enter a valid area.";
             costEl.innerText = "";
             return;
           }
-  
-          var baseTime = area / 1500;
-          var adjustedTime = baseTime * terrainFactor;
-          var finalCost = adjustedTime * laborPrice;
-  
-          timeEl.innerText = adjustedTime.toFixed(2) + " hours";
+
+          // 1. Find the matching cost bracket
+          var bracket = COST_BRACKETS.find(b => area <= b.maxArea)
+                     || COST_BRACKETS[COST_BRACKETS.length - 1];
+
+          // 2. Compute the midpoint of the cost range
+          var baseCost = (bracket.minCost + bracket.maxCost) / 2;
+
+          // 3. Apply terrain factor
+          var finalCost = baseCost * terrainFactor;
+
+          // 4. Derive time from cost & hourly rate
+          var finalTime = finalCost / laborPrice;
+
+          timeEl.innerText = finalTime.toFixed(2) + " hours";
           costEl.innerText = "$" + finalCost.toFixed(2);
-  
-          // Calculate the button's center position for confetti origin.
+
+          // Confetti celebration
           var rect = calcButton.getBoundingClientRect();
           var originX = (rect.left + rect.width / 2) / window.innerWidth;
           var originY = (rect.top + rect.height / 2) / window.innerHeight;
-          
-          // Launch confetti from the button's center.
-          confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { x: originX, y: originY }
-          });
+          confetti({ particleCount: 100, spread: 70, origin: { x: originX, y: originY } });
         });
       })(i);
     }
