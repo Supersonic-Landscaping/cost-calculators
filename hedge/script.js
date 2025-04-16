@@ -1,30 +1,36 @@
 import confetti from 'canvas-confetti';
 
-(function() {
-  // Check for any existing <link> that ends with "style.css"
-  var existingLink = document.querySelector('link[href$="style.css"]');
-  if (existingLink) {
-    if (existingLink.href !== "https://tools.supersoniclandscaping.com/style.css") {
-      existingLink.href = "https://tools.supersoniclandscaping.com/style.css";
-    }
-  } else {
-    var link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://tools.supersoniclandscaping.com/style.css";
+(async function() {
+  // Dynamically load manifest.json from the same origin as the script.
+  let manifest = {};
+  try {
+    const response = await fetch('https://tools.supersoniclandscaping.com/manifest.json');
+    manifest = await response.json();
+  } catch (err) {
+    console.error('Error loading manifest:', err);
+  }
+
+  // Determine the CSS asset URL from manifest.
+  // The key will be relative to the project root; adjust if needed.
+  // For example, if style.css is imported as 'src/assets/style.css'
+  const styleAsset = manifest['src/assets/style.css'];
+  const cssUrl = styleAsset ? `https://tools.supersoniclandscaping.com/${styleAsset}` : 'https://tools.supersoniclandscaping.com/style.css';
+
+  // Check if a link with our CSS is already present; if not, add it.
+  if (!document.querySelector(`link[href^="https://tools.supersoniclandscaping.com/"]`)) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = cssUrl;
     document.head.appendChild(link);
   }
 
   document.addEventListener("DOMContentLoaded", function() {
     var calculators = document.getElementsByClassName("supersonic-hedgetrimming-calculator");
-
     for (var i = 0; i < calculators.length; i++) {
-      // Get custom title or default.
       var titleText = calculators[i].getAttribute("data-title") || "Hedge Trimming Estimate";
-      // Set a minimum service fee.
-      var minFee = 75;
-
-      // Inject widget HTML: We now only ask for Hedge Length and Hedge Height.
-      // A disposal fee checkbox is provided to optionally add a $50 fee.
+      var baseFeeStr = calculators[i].getAttribute("data-base-fee");
+      var baseFee = (baseFeeStr && !isNaN(parseFloat(baseFeeStr))) ? parseFloat(baseFeeStr) : 100;
+      // Inject widget HTML, including a disposal checkbox
       calculators[i].innerHTML = `
         <div class="htc-widget" itemscope itemtype="https://schema.org/WebApplication">
           <meta itemprop="name" content="${titleText}">
@@ -53,10 +59,9 @@ import confetti from 'canvas-confetti';
             <input type="number" id="htc-height-${i}" placeholder="e.g., 5 or 8">
           </div>
           <div class="htc-field inline-disposal">
-  <input type="checkbox" id="htc-disposal-${i}">
-  <label for="htc-disposal-${i}">Include debris disposal (add $50)</label>
-</div>
-
+            <input type="checkbox" id="htc-disposal-${i}">
+            <label for="htc-disposal-${i}">Include debris disposal (add $50)</label>
+          </div>
           <button id="htc-calc-${i}" class="button">Calculate</button>
           <div id="htc-results-${i}" class="htc-results">
             <p><strong>Estimated Price:</strong> <span id="htc-price-${i}">—</span></p>
@@ -66,7 +71,6 @@ import confetti from 'canvas-confetti';
         </div>
       `;
   
-      // Attach the calculation event listener.
       (function(index) {
         var calcButton = document.getElementById("htc-calc-" + index);
         calcButton.addEventListener("click", function() {
@@ -75,36 +79,29 @@ import confetti from 'canvas-confetti';
           var priceEl = document.getElementById("htc-price-" + index);
           var disposalChecked = document.getElementById("htc-disposal-" + index).checked;
           var disposalFee = 50;
-          
-          // Validate the inputs.
+  
           if (isNaN(length) || length <= 0 || isNaN(height) || height <= 0) {
             priceEl.innerText = "Please enter valid hedge length and height.";
             return;
           }
-          
-          // Determine the rate per foot:
-          // - For hedges under 6 ft tall, use $3.25/ft.
-          // - For hedges 6 ft or taller, use $4.50/ft.
+  
           var ratePerFoot = (height >= 6) ? 4.50 : 3.25;
           var cost = length * ratePerFoot;
-          
-          // Add disposal fee if selected.
+  
           if (disposalChecked) {
             cost += disposalFee;
           }
-          
-          // Enforce minimum service fee.
-          if (cost < minFee) {
-            cost = minFee;
+  
+          if (cost < 75) {
+            cost = 75;
           }
-          
+  
           priceEl.innerText = "$" + cost.toFixed(2);
-          
-          // Calculate the button's center position for confetti origin.
+  
           var rect = calcButton.getBoundingClientRect();
           var originX = (rect.left + rect.width / 2) / window.innerWidth;
           var originY = (rect.top + rect.height / 2) / window.innerHeight;
-          
+  
           confetti({
             particleCount: 100,
             spread: 70,
@@ -115,3 +112,4 @@ import confetti from 'canvas-confetti';
     }
   });
 })();
+
