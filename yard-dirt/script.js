@@ -6,10 +6,10 @@ import confetti from 'canvas-confetti';
 
   // Load shared stylesheet if missing
   if (!document.querySelector(`link[href="${CSS_HREF}"]`)) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = CSS_HREF;
-    document.head.appendChild(link);
+    const linkEl = document.createElement('link');
+    linkEl.rel = 'stylesheet';
+    linkEl.href = CSS_HREF;
+    document.head.appendChild(linkEl);
   }
 
   // Unit conversion to feet
@@ -60,196 +60,237 @@ import confetti from 'canvas-confetti';
   };
 
   document.addEventListener('DOMContentLoaded', () => {
-    const widgets = document.querySelectorAll('.supersonic-dirt-calculator');
-
-    widgets.forEach((widget, idx) => {
+    document.querySelectorAll('.supersonic-dirt-calculator').forEach((widget, idx) => {
       const title = widget.dataset.title || 'Material Volume Calculator';
 
-      // Inject HTML structure
-widget.innerHTML = `
-<div class="dirt-widget" itemscope itemtype="https://schema.org/WebApplication">
-  <meta itemprop="name" content="${title}">
-  <meta itemprop="description" content="Calculate volumes & cost for dirt, mulch, gravel, cement, etc.">
-  <meta itemprop="applicationCategory" content="UtilitiesApplication">
-  <meta itemprop="operatingSystem" content="All">
-  <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-    <meta itemprop="price" content="0">
-    <meta itemprop="priceCurrency" content="USD">
-  </div>
-  <div itemprop="creator" itemscope itemtype="https://schema.org/Organization">
-    <meta itemprop="name" content="Supersonic Landscaping">
-    <meta itemprop="url" content="https://www.supersoniclandscaping.com/">
-  </div>
+      widget.innerHTML = `
+        <div class="dirt-widget" itemscope itemtype="https://schema.org/WebApplication">
+          <meta itemprop="name" content="${title}">
+          <meta itemprop="description" content="Calculate volumes & cost for dirt, mulch, gravel, cement, etc.">
+          <meta itemprop="applicationCategory" content="UtilitiesApplication">
+          <meta itemprop="operatingSystem" content="All">
+          <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+            <meta itemprop="price" content="0">
+            <meta itemprop="priceCurrency" content="USD">
+          </div>
+          <div itemprop="creator" itemscope itemtype="https://schema.org/Organization">
+            <meta itemprop="name" content="Supersonic Landscaping">
+            <meta itemprop="url" content="https://www.supersoniclandscaping.com/">
+          </div>
 
-  <h3>${title}</h3>
+          <h3>${title}</h3>
 
-  <div class="dirt-field">
-    <select id="shape-${idx}" aria-label="Area Shape">
-      <option value="">-- Select Shape --</option>
-      <option value="square">Square</option>
-      <option value="rectangle">Rectangle</option>
-      <option value="rect-border">Rectangle Border</option>
-      <option value="circle">Circle</option>
-      <option value="circ-border">Circle Border</option>
-      <option value="annulus">Annulus</option>
-      <option value="triangle">Triangle</option>
-      <option value="trapezoid">Trapezoid</option>
-    </select>
-  </div>
+          <div class="dirt-field">
+            <select id="shape-${idx}" aria-label="Area Shape">
+              <option value="">-- Select Shape --</option>
+              <option value="square">Square</option>
+              <option value="rectangle">Rectangle</option>
+              <option value="rect-border">Rectangle Border</option>
+              <option value="circle">Circle</option>
+              <option value="circ-border">Circle Border</option>
+              <option value="annulus">Annulus</option>
+              <option value="triangle">Triangle</option>
+              <option value="trapezoid">Trapezoid</option>
+            </select>
+          </div>
 
-  ${['square','rectangle','rect-border','circle','circ-border','annulus','triangle','trapezoid']
-    .map(shape => `
-      <fieldset id="fs-${shape}-${idx}" class="dirt-shape-fs">
-        <legend>${shape.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase())}</legend>
+          <fieldset id="fs-square-${idx}" class="dirt-shape-fs" style="display:none;">
+            <legend>Square</legend>
+            <input class="dim" data-dim="side" placeholder="Side length">
+            <select class="unit" data-dim="side" aria-label="Side unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="depth" placeholder="Depth">
+            <select class="unit" data-dim="depth" aria-label="Depth unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
+          </fieldset>
 
-        ${{
-          square:
-            `<input class="dim" data-dim="side" placeholder="Side length">
-             <select class="unit" data-dim="side" aria-label="Side unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>`,
+          <fieldset id="fs-rectangle-${idx}" class="dirt-shape-fs" style="display:none;">
+            <legend>Rectangle</legend>
+            <input class="dim" data-dim="length" placeholder="Length">
+            <select class="unit" data-dim="length" aria-label="Length unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="width" placeholder="Width">
+            <select class="unit" data-dim="width" aria-label="Width unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="depth" placeholder="Depth">
+            <select class="unit" data-dim="depth" aria-label="Depth unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
+          </fieldset>
 
-          rectangle:
-            `<input class="dim" data-dim="length" placeholder="Length">
-             <select class="unit" data-dim="length" aria-label="Length unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>
-             <input class="dim" data-dim="width" placeholder="Width">
-             <select class="unit" data-dim="width" aria-label="Width unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>`,
+          <fieldset id="fs-rect-border-${idx}" class="dirt-shape-fs" style="display:none;">
+            <legend>Rectangle Border</legend>
+            <input class="dim" data-dim="innerLength" placeholder="Inner length">
+            <select class="unit" data-dim="innerLength" aria-label="Inner length unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="innerWidth" placeholder="Inner width">
+            <select class="unit" data-dim="innerWidth" aria-label="Inner width unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="border" placeholder="Border width">
+            <select class="unit" data-dim="border" aria-label="Border width unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="depth" placeholder="Depth">
+            <select class="unit" data-dim="depth" aria-label="Depth unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
+          </fieldset>
 
-          'rect-border':
-            `<input class="dim" data-dim="innerLength" placeholder="Inner length">
-             <select class="unit" data-dim="innerLength" aria-label="Inner length unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>
-             <input class="dim" data-dim="innerWidth" placeholder="Inner width">
-             <select class="unit" data-dim="innerWidth" aria-label="Inner width unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>
-             <input class="dim" data-dim="border" placeholder="Border width">
-             <select class="unit" data-dim="border" aria-label="Border width unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>`,
+          <fieldset id="fs-circle-${idx}" class="dirt-shape-fs" style="display:none;">
+            <legend>Circle</legend>
+            <input class="dim" data-dim="diameter" placeholder="Diameter">
+            <select class="unit" data-dim="diameter" aria-label="Diameter unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="depth" placeholder="Depth">
+            <select class="unit" data-dim="depth" aria-label="Depth unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
+          </fieldset>
 
-          circle:
-            `<input class="dim" data-dim="diameter" placeholder="Diameter">
-             <select class="unit" data-dim="diameter" aria-label="Diameter unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>`,
+          <fieldset id="fs-circ-border-${idx}" class="dirt-shape-fs" style="display:none;">
+            <legend>Circle Border</legend>
+            <input class="dim" data-dim="innerDiameter" placeholder="Inner diameter">
+            <select class="unit" data-dim="innerDiameter" aria-label="Inner diameter unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="border" placeholder="Border width">
+            <select class="unit" data-dim="border" aria-label="Border width unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="depth" placeholder="Depth">
+            <select class="unit" data-dim="depth" aria-label="Depth unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
+          </fieldset>
 
-          'circ-border':
-            `<input class="dim" data-dim="innerDiameter" placeholder="Inner diameter">
-             <select class="unit" data-dim="innerDiameter" aria-label="Inner diameter unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>
-             <input class="dim" data-dim="border" placeholder="Border width">
-             <select class="unit" data-dim="border" aria-label="Border width unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>`,
+          <fieldset id="fs-annulus-${idx}" class="dirt-shape-fs" style="display:none;">
+            <legend>Annulus</legend>
+            <input class="dim" data-dim="outerDiameter" placeholder="Outer diameter">
+            <select class="unit" data-dim="outerDiameter" aria-label="Outer diameter unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="innerDiameter" placeholder="Inner diameter">
+            <select class="unit" data-dim="innerDiameter" aria-label="Inner diameter unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="depth" placeholder="Depth">
+            <select class="unit" data-dim="depth" aria-label="Depth unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
+          </fieldset>
 
-          annulus:
-            `<input class="dim" data-dim="outerDiameter" placeholder="Outer diameter">
-             <select class="unit" data-dim="outerDiameter" aria-label="Outer diameter unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>
-             <input class="dim" data-dim="innerDiameter" placeholder="Inner diameter">
-             <select class="unit" data-dim="innerDiameter" aria-label="Inner diameter unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>`,
+          <fieldset id="fs-triangle-${idx}" class="dirt-shape-fs" style="display:none;">
+            <legend>Triangle</legend>
+            <input class="dim" data-dim="a" placeholder="Side a">
+            <select class="unit" data-dim="a" aria-label="Side a unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="b" placeholder="Side b">
+            <select class="unit" data-dim="b" aria-label="Side b unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="c" placeholder="Side c">
+            <select class="unit" data-dim="c" aria-label="Side c unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="depth" placeholder="Depth">
+            <select class="unit" data-dim="depth" aria-label="Depth unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
+          </fieldset>
 
-          triangle:
-            `<input class="dim" data-dim="a" placeholder="Side a">
-             <select class="unit" data-dim="a" aria-label="Side a unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>
-             <input class="dim" data-dim="b" placeholder="Side b">
-             <select class="unit" data-dim="b" aria-label="Side b unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>
-             <input class="dim" data-dim="c" placeholder="Side c">
-             <select class="unit" data-dim="c" aria-label="Side c unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>`,
+          <fieldset id="fs-trapezoid-${idx}" class="dirt-shape-fs" style="display:none;">
+            <legend>Trapezoid</legend>
+            <input class="dim" data-dim="a" placeholder="Side a">
+            <select class="unit" data-dim="a" aria-label="Side a unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="b" placeholder="Side b">
+            <select class="unit" data-dim="b" aria-label="Side b unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="h" placeholder="Height h">
+            <select class="unit" data-dim="h" aria-label="Height unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input class="dim" data-dim="depth" placeholder="Depth">
+            <select class="unit" data-dim="depth" aria-label="Depth unit">
+              <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+            </select>
+            <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
+          </fieldset>
 
-          trapezoid:
-            `<input class="dim" data-dim="a" placeholder="Side a">
-             <select class="unit" data-dim="a" aria-label="Side a unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>
-             <input class="dim" data-dim="b" placeholder="Side b">
-             <select class="unit" data-dim="b" aria-label="Side b unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>
-             <input class="dim" data-dim="h" placeholder="Height h">
-             <select class="unit" data-dim="h" aria-label="Height unit">
-               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-             </select>`
-        }[shape]}
+          <div class="dirt-field">
+            <input type="number" id="price-${idx}" placeholder="Price">
+            <select id="price-unit-${idx}" aria-label="Price unit">
+              <option value="yd">$/yd³</option>
+              <option value="ft">$/ft³</option>
+              <option value="m">$/m³</option>
+            </select>
+          </div>
 
-        <input class="dim" data-dim="depth" placeholder="Depth">
-        <select class="unit" data-dim="depth" aria-label="Depth unit">
-          <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
-        </select>
+          <button id="calc-${idx}" class="button">Calculate</button>
 
-        <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
-      </fieldset>
-    `).join('')}
+          <div id="results-${idx}" class="dirt-results">
+            <p><strong>Vol:</strong> <span id="vol-yd-${idx}">0</span> yd³ | <span id="vol-ft-${idx}">0</span> ft³ | <span id="vol-m-${idx}">0</span> m³</p>
+            <p><strong>Cost:</strong> <span id="cost-${idx}">$0.00</span></p>
+          </div>
 
-  <div class="dirt-field">
-    <input type="number" id="price-${idx}" placeholder="Price">
-    <select id="price-unit-${idx}" aria-label="Price unit">
-      <option value="yd">$/yd³</option>
-      <option value="ft">$/ft³</option>
-      <option value="m">$/m³</option>
-    </select>
-  </div>
+          <p class="dirt-credit">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
+        </div>
+      `;
 
-  <button id="calc-${idx}" class="button">Calculate</button>
-
-  <div id="results-${idx}" class="dirt-results">
-    <p><strong>Vol:</strong> <span id="vol-yd-${idx}">0</span> yd³ | <span id="vol-ft-${idx}">0</span> ft³ | <span id="vol-m-${idx}">0</span> m³</p>
-    <p><strong>Cost:</strong> <span id="cost-${idx}">$0.00</span></p>
-  </div>
-
-  <p class="dirt-credit">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
-</div>
-`;
-
-
-      const fsAll = widget.querySelectorAll('.dirt-shape-fs');
+      // hide all fieldsets initially
       const shapeSel = document.getElementById(`shape-${idx}`);
-      const hideFs = () => fsAll.forEach(fs => fs.style.display = 'none');
-      hideFs();
+      const fsAll    = widget.querySelectorAll('.dirt-shape-fs');
+      const hideAll  = () => fsAll.forEach(fs => fs.style.display = 'none');
+      hideAll();
 
-      // Show relevant fields
+      // show the correct fieldset when shape changes
       shapeSel.addEventListener('change', () => {
-        hideFs();
+        hideAll();
         const sel = shapeSel.value;
-        if (sel) document.getElementById(`fs-${sel}-${idx}`).style.display = 'block';
+        if (sel) {
+          const el = document.getElementById(`fs-${sel}-${idx}`);
+          if (el) el.style.display = 'block';
+        }
       });
 
-      // Calculate on click
+      // calculate on button click
       document.getElementById(`calc-${idx}`).addEventListener('click', () => {
         const shape = shapeSel.value;
         if (!shape) return alert('Please select a shape.');
 
-        // Gather dims
-        const dims = {};
         let valid = true;
+        const dims = {};
         widget.querySelectorAll('.dim').forEach(inp => {
           const key = inp.dataset.dim;
-          let val = parseFloat(inp.value);
+          const raw = parseFloat(inp.value);
           if (key !== 'quantity') {
-            if (isNaN(val) || val <= 0) valid = false;
-            val = toFeet(val, widget.querySelector(`.unit[data-dim="${key}"]`).value);
+            if (isNaN(raw) || raw <= 0) valid = false;
+            const unit = widget.querySelector(`.unit[data-dim="${key}"]`).value;
+            dims[key] = toFeet(raw, unit);
+          } else {
+            dims[key] = raw;
           }
-          dims[key] = val;
         });
         if (!valid) return alert('Please fill all fields correctly.');
 
-        const area = calcArea(shape, dims);
+        const area  = calcArea(shape, dims);
         const volFt = area * dims.depth * dims.quantity;
         const yd3   = volFt / 27;
         const m3    = volFt / 35.3147;
@@ -258,17 +299,22 @@ widget.innerHTML = `
         const costMap = { yd: yd3 * price, ft: volFt * price, m: m3 * price };
         const totalCost = costMap[pUnit] || 0;
 
-        // Render
+        // render results
         document.getElementById(`vol-yd-${idx}`).innerText = yd3.toFixed(3);
         document.getElementById(`vol-ft-${idx}`).innerText = volFt.toFixed(2);
         document.getElementById(`vol-m-${idx}`).innerText  = m3.toFixed(3);
         document.getElementById(`cost-${idx}`).innerText   = `$${totalCost.toFixed(2)}`;
 
-        // Confetti
+        // confetti celebration
         const btn = document.getElementById(`calc-${idx}`);
         const r   = btn.getBoundingClientRect();
-        confetti({ particleCount: 100, spread: 70,
-          origin: { x: (r.left + r.width/2)/window.innerWidth, y: (r.top + r.height/2)/window.innerHeight }
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: {
+            x: (r.left + r.width / 2) / window.innerWidth,
+            y: (r.top + r.height / 2) / window.innerHeight
+          }
         });
       });
     });
