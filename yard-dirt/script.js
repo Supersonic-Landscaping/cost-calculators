@@ -66,87 +66,157 @@ import confetti from 'canvas-confetti';
       const title = widget.dataset.title || 'Material Volume Calculator';
 
       // Inject HTML structure
-      widget.innerHTML = `
-        <div class="dirt-widget" itemscope itemtype="https://schema.org/WebApplication">
-          <meta itemprop="name" content="${title}">
-          <meta itemprop="description" content="Calculate volumes & cost for dirt, mulch, gravel, cement, etc.">
-          <meta itemprop="applicationCategory" content="UtilitiesApplication">
-          <meta itemprop="operatingSystem" content="All">
-          <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
-            <meta itemprop="price" content="0">
-            <meta itemprop="priceCurrency" content="USD">
-          </div>
-          <div itemprop="creator" itemscope itemtype="https://schema.org/Organization">
-            <meta itemprop="name" content="Supersonic Landscaping">
-            <meta itemprop="url" content="https://www.supersoniclandscaping.com/">
-          </div>
+widget.innerHTML = `
+<div class="dirt-widget" itemscope itemtype="https://schema.org/WebApplication">
+  <meta itemprop="name" content="${title}">
+  <meta itemprop="description" content="Calculate volumes & cost for dirt, mulch, gravel, cement, etc.">
+  <meta itemprop="applicationCategory" content="UtilitiesApplication">
+  <meta itemprop="operatingSystem" content="All">
+  <div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+    <meta itemprop="price" content="0">
+    <meta itemprop="priceCurrency" content="USD">
+  </div>
+  <div itemprop="creator" itemscope itemtype="https://schema.org/Organization">
+    <meta itemprop="name" content="Supersonic Landscaping">
+    <meta itemprop="url" content="https://www.supersoniclandscaping.com/">
+  </div>
 
-          <h3>${title}</h3>
-          <div class="dirt-field">
-            <label for="shape-${idx}">Area Shape:</label>
-            <select id="shape-${idx}">
-              <option value="">-- Select --</option>
-              <option value="square">Square</option>
-              <option value="rectangle">Rectangle</option>
-              <option value="rect-border">Rectangle Border</option>
-              <option value="circle">Circle</option>
-              <option value="circ-border">Circle Border</option>
-              <option value="annulus">Annulus</option>
-              <option value="triangle">Triangle</option>
-              <option value="trapezoid">Trapezoid</option>
-            </select>
-          </div>
+  <h3>${title}</h3>
 
-          <!-- Fieldsets for each shape -->
-          ${['square','rectangle','rect-border','circle','circ-border','annulus','triangle','trapezoid']
-            .map(shape => `
-              <fieldset id="fs-${shape}-${idx}" class="dirt-shape-fs">
-                <legend>${shape.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase())}</legend>
-                ${{
-                  square:    '<label>Side:</label><input class="dim" data-dim="side"><select class="unit" data-dim="side">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>',
-                  rectangle: '<label>Length:</label><input class="dim" data-dim="length"><select class="unit" data-dim="length">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>' +
-                              '<label>Width:</label><input class="dim" data-dim="width"><select class="unit" data-dim="width">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>',
-                  'rect-border': '<label>Inner L:</label><input class="dim" data-dim="innerLength"><select class="unit" data-dim="innerLength">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>' +
-                                 '<label>Inner W:</label><input class="dim" data-dim="innerWidth"><select class="unit" data-dim="innerWidth">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>' +
-                                 '<label>Border:</label><input class="dim" data-dim="border"><select class="unit" data-dim="border">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>',
-                  circle:    '<label>Diameter:</label><input class="dim" data-dim="diameter"><select class="unit" data-dim="diameter">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>',
-                  'circ-border':'<label>Inner Dia:</label><input class="dim" data-dim="innerDiameter"><select class="unit" data-dim="innerDiameter">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>' +
-                                 '<label>Border:</label><input class="dim" data-dim="border"><select class="unit" data-dim="border">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>',
-                  annulus:   '<label>Outer Dia:</label><input class="dim" data-dim="outerDiameter"><select class="unit" data-dim="outerDiameter">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>' +
-                                 '<label>Inner Dia:</label><input class="dim" data-dim="innerDiameter"><select class="unit" data-dim="innerDiameter">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>',
-                  triangle:  '<label>Side a:</label><input class="dim" data-dim="a"><select class="unit" data-dim="a">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>' +
-                                 '<label>Side b:</label><input class="dim" data-dim="b"><select class="unit" data-dim="b">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>' +
-                                 '<label>Side c:</label><input class="dim" data-dim="c"><select class="unit" data-dim="c">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>',
-                  trapezoid:'<label>a:</label><input class="dim" data-dim="a"><select class="unit" data-dim="a">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>' +
-                                 '<label>b:</label><input class="dim" data-dim="b"><select class="unit" data-dim="b">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>' +
-                                 '<label>h:</label><input class="dim" data-dim="h"><select class="unit" data-dim="h">'+['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')+'</select>'
-                }[shape]}
-                <label>Depth:</label>
-                <input class="dim" data-dim="depth"><select class="unit" data-dim="depth">${['in','ft','yd','cm','m'].map(u=>`<option>${u}</option>`).join('')}</select>
-                <label>Quantity:</label>
-                <input type="number" class="dim" data-dim="quantity" value="1" min="1">
-              </fieldset>
-            `).join('')}
+  <div class="dirt-field">
+    <select id="shape-${idx}" aria-label="Area Shape">
+      <option value="">-- Select Shape --</option>
+      <option value="square">Square</option>
+      <option value="rectangle">Rectangle</option>
+      <option value="rect-border">Rectangle Border</option>
+      <option value="circle">Circle</option>
+      <option value="circ-border">Circle Border</option>
+      <option value="annulus">Annulus</option>
+      <option value="triangle">Triangle</option>
+      <option value="trapezoid">Trapezoid</option>
+    </select>
+  </div>
 
-          <!-- Cost inputs -->
-          <div class="dirt-field">
-            <label for="price-${idx}">Price:</label>
-            <input type="number" id="price-${idx}" placeholder="0">
-            <select id="price-unit-${idx}">
-              <option value="yd">$/yd³</option>
-              <option value="ft">$/ft³</option>
-              <option value="m">$/m³</option>
-            </select>
-          </div>
+  ${['square','rectangle','rect-border','circle','circ-border','annulus','triangle','trapezoid']
+    .map(shape => `
+      <fieldset id="fs-${shape}-${idx}" class="dirt-shape-fs">
+        <legend>${shape.replace('-', ' ').replace(/\b\w/g, c => c.toUpperCase())}</legend>
 
-          <button id="calc-${idx}" class="button">Calculate</button>
-          <div id="results-${idx}" class="dirt-results">
-            <p><strong>Vol:</strong> <span id="vol-yd-${idx}">0</span> yd³ | <span id="vol-ft-${idx}">0</span> ft³ | <span id="vol-m-${idx}">0</span> m³</p>
-            <p><strong>Cost:</strong> <span id="cost-${idx}">$0.00</span></p>
-          </div>
-          <p class="dirt-credit">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
-        </div>
-      `;
+        ${{
+          square:
+            `<input class="dim" data-dim="side" placeholder="Side length">
+             <select class="unit" data-dim="side" aria-label="Side unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>`,
+
+          rectangle:
+            `<input class="dim" data-dim="length" placeholder="Length">
+             <select class="unit" data-dim="length" aria-label="Length unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>
+             <input class="dim" data-dim="width" placeholder="Width">
+             <select class="unit" data-dim="width" aria-label="Width unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>`,
+
+          'rect-border':
+            `<input class="dim" data-dim="innerLength" placeholder="Inner length">
+             <select class="unit" data-dim="innerLength" aria-label="Inner length unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>
+             <input class="dim" data-dim="innerWidth" placeholder="Inner width">
+             <select class="unit" data-dim="innerWidth" aria-label="Inner width unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>
+             <input class="dim" data-dim="border" placeholder="Border width">
+             <select class="unit" data-dim="border" aria-label="Border width unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>`,
+
+          circle:
+            `<input class="dim" data-dim="diameter" placeholder="Diameter">
+             <select class="unit" data-dim="diameter" aria-label="Diameter unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>`,
+
+          'circ-border':
+            `<input class="dim" data-dim="innerDiameter" placeholder="Inner diameter">
+             <select class="unit" data-dim="innerDiameter" aria-label="Inner diameter unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>
+             <input class="dim" data-dim="border" placeholder="Border width">
+             <select class="unit" data-dim="border" aria-label="Border width unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>`,
+
+          annulus:
+            `<input class="dim" data-dim="outerDiameter" placeholder="Outer diameter">
+             <select class="unit" data-dim="outerDiameter" aria-label="Outer diameter unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>
+             <input class="dim" data-dim="innerDiameter" placeholder="Inner diameter">
+             <select class="unit" data-dim="innerDiameter" aria-label="Inner diameter unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>`,
+
+          triangle:
+            `<input class="dim" data-dim="a" placeholder="Side a">
+             <select class="unit" data-dim="a" aria-label="Side a unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>
+             <input class="dim" data-dim="b" placeholder="Side b">
+             <select class="unit" data-dim="b" aria-label="Side b unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>
+             <input class="dim" data-dim="c" placeholder="Side c">
+             <select class="unit" data-dim="c" aria-label="Side c unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>`,
+
+          trapezoid:
+            `<input class="dim" data-dim="a" placeholder="Side a">
+             <select class="unit" data-dim="a" aria-label="Side a unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>
+             <input class="dim" data-dim="b" placeholder="Side b">
+             <select class="unit" data-dim="b" aria-label="Side b unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>
+             <input class="dim" data-dim="h" placeholder="Height h">
+             <select class="unit" data-dim="h" aria-label="Height unit">
+               <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+             </select>`
+        }[shape]}
+
+        <input class="dim" data-dim="depth" placeholder="Depth">
+        <select class="unit" data-dim="depth" aria-label="Depth unit">
+          <option>ft</option><option>yd</option><option>in</option><option>m</option><option>cm</option>
+        </select>
+
+        <input type="number" class="dim" data-dim="quantity" min="1" placeholder="Quantity" value="1">
+      </fieldset>
+    `).join('')}
+
+  <div class="dirt-field">
+    <input type="number" id="price-${idx}" placeholder="Price">
+    <select id="price-unit-${idx}" aria-label="Price unit">
+      <option value="yd">$/yd³</option>
+      <option value="ft">$/ft³</option>
+      <option value="m">$/m³</option>
+    </select>
+  </div>
+
+  <button id="calc-${idx}" class="button">Calculate</button>
+
+  <div id="results-${idx}" class="dirt-results">
+    <p><strong>Vol:</strong> <span id="vol-yd-${idx}">0</span> yd³ | <span id="vol-ft-${idx}">0</span> ft³ | <span id="vol-m-${idx}">0</span> m³</p>
+    <p><strong>Cost:</strong> <span id="cost-${idx}">$0.00</span></p>
+  </div>
+
+  <p class="dirt-credit">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
+</div>
+`;
+
 
       const fsAll = widget.querySelectorAll('.dirt-shape-fs');
       const shapeSel = document.getElementById(`shape-${idx}`);
