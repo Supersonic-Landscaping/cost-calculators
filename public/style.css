@@ -164,3 +164,9 @@
     font-size: 1rem;
   }
 }
+
+/* Dirt Calculator Specific */
+.dirt-widget .dirt-field { margin-bottom: 12px; }
+.dirt-widget fieldset { border: 1px solid #ccc; padding: 12px; margin: 12px 0; display: none; }
+.dirt-widget legend { font-weight: bold; margin-bottom: 8px; }
+.dirt-widget .dirt-results p { font-size: 1rem; margin: 8px 0; }

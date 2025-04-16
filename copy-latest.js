@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 // Copy calculator files for each widget.
-const calculators = ['hedge', 'mowing', 'mulching'];
+const calculators = ['hedge', 'mowing', 'yard-dirt', 'mulching'];
 
 calculators.forEach(name => {
   const dir = `./dist/${name}`;
