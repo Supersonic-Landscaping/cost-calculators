@@ -3,7 +3,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
   build: {
-    manifest: true,  // enable manifest generation
+    manifest: true,  // Enable manifest generation
     outDir: 'dist',
     rollupOptions: {
       inlineDynamicImports: true,
