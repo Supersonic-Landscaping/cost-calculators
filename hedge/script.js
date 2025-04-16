@@ -1,38 +1,28 @@
 import confetti from 'canvas-confetti';
 
 (async function() {
-  // Try to load the Vite manifest from the root.
+  // Check if a <link> ending with "style.css" exists and ensure it uses the absolute URL.
+  var existingLink = document.querySelector('link[href$="style.css"]');
+  if (existingLink) {
+    if (existingLink.href !== "https://tools.supersoniclandscaping.com/style.css") {
+      existingLink.href = "https://tools.supersoniclandscaping.com/style.css";
+    }
+  } else {
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href = "https://tools.supersoniclandscaping.com/style.css";
+    document.head.appendChild(link);
+  }
+
+  // Load the manifest (if available) to get hashed filenames for CSS if needed
   let manifest = null;
   try {
     const resp = await fetch('https://tools.supersoniclandscaping.com/manifest.json');
     if (resp.ok) {
       manifest = await resp.json();
-    } else {
-      console.warn('Manifest not found; using fallback CSS URL.');
     }
   } catch (err) {
-    console.warn('Error fetching manifest:', err, 'Falling back to default CSS URL.');
-  }
-
-  // Determine the CSS URL.
-  // If manifest exists and contains the key for your CSS file (adjust the key if needed),
-  // use that path; otherwise, fall back to the absolute URL.
-  // Here we assume that your CSS was imported from 'src/assets/style.css'.
-  const cssKey = 'src/assets/style.css';
-  let cssUrl = "https://tools.supersoniclandscaping.com/style.css"; // fallback
-  if (manifest && manifest[cssKey] && manifest[cssKey].file) {
-    cssUrl = `https://tools.supersoniclandscaping.com/${manifest[cssKey].file}`;
-  }
-
-  // Ensure the link element for the stylesheet is added.
-  var existingLink = document.querySelector(`link[href^="https://tools.supersoniclandscaping.com/"]`);
-  if (existingLink) {
-    existingLink.href = cssUrl;
-  } else {
-    var link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = cssUrl;
-    document.head.appendChild(link);
+    console.warn('Manifest fetch error, proceeding with default CSS URL:', err);
   }
 
   document.addEventListener("DOMContentLoaded", function() {
@@ -41,10 +31,19 @@ import confetti from 'canvas-confetti';
     for (var i = 0; i < calculators.length; i++) {
       // Get custom title or default.
       var titleText = calculators[i].getAttribute("data-title") || "Hedge Trimming Estimate";
+      // Get the minimum base fee.
       var baseFeeStr = calculators[i].getAttribute("data-base-fee");
       var baseFee = (baseFeeStr && !isNaN(parseFloat(baseFeeStr))) ? parseFloat(baseFeeStr) : 100;
       
-      // Inject the widget HTML including a disposal fee checkbox.
+      // Equipment surcharge is still retrieved as before.
+      var equipmentSurchargeStr = calculators[i].getAttribute("data-equipment-surcharge");
+      var equipmentSurcharge = (equipmentSurchargeStr && !isNaN(parseFloat(equipmentSurchargeStr))) ? parseFloat(equipmentSurchargeStr) : 50;
+
+      // NEW: Get the disposal fee from data-disposal-fee attribute; default to $50 if not provided.
+      var disposalFeeAttr = calculators[i].getAttribute("data-disposal-fee");
+      var disposalFee = (disposalFeeAttr && !isNaN(parseFloat(disposalFeeAttr))) ? parseFloat(disposalFeeAttr) : 50;
+      
+      // Inject the widget HTML with a disposal checkbox.
       calculators[i].innerHTML = `
         <div class="htc-widget" itemscope itemtype="https://schema.org/WebApplication">
           <meta itemprop="name" content="${titleText}">
@@ -74,7 +73,7 @@ import confetti from 'canvas-confetti';
           </div>
           <div class="htc-field inline-disposal">
             <input type="checkbox" id="htc-disposal-${i}">
-            <label for="htc-disposal-${i}">Include debris disposal (add $50)</label>
+            <label for="htc-disposal-${i}">Include debris disposal (add $${disposalFee})</label>
           </div>
           <button id="htc-calc-${i}" class="button">Calculate</button>
           <div id="htc-results-${i}" class="htc-results">
@@ -85,6 +84,7 @@ import confetti from 'canvas-confetti';
         </div>
       `;
   
+      // Attach the calculation event listener.
       (function(index) {
         var calcButton = document.getElementById("htc-calc-" + index);
         calcButton.addEventListener("click", function() {
@@ -92,28 +92,31 @@ import confetti from 'canvas-confetti';
           var height = parseFloat(document.getElementById("htc-height-" + index).value);
           var priceEl = document.getElementById("htc-price-" + index);
           var disposalChecked = document.getElementById("htc-disposal-" + index).checked;
-          var disposalFee = 50;
-          
+  
           if (isNaN(length) || length <= 0 || isNaN(height) || height <= 0) {
             priceEl.innerText = "Please enter valid hedge length and height.";
             return;
           }
           
-          // Rate per foot: $3.25 for hedges under 6 ft; $4.50 for hedges 6 ft or taller.
+          // Determine the rate per foot:
+          // - Use $3.25/ft for hedges under 6 ft tall.
+          // - Use $4.50/ft for hedges 6 ft or taller.
           var ratePerFoot = (height >= 6) ? 4.50 : 3.25;
           var cost = length * ratePerFoot;
-          
+  
+          // Add disposal fee if the checkbox is checked.
           if (disposalChecked) {
             cost += disposalFee;
           }
-          
+  
+          // Enforce a minimum service fee of $75.
           if (cost < 75) {
             cost = 75;
           }
           
           priceEl.innerText = "$" + cost.toFixed(2);
-          
-          // Confetti: launch from the center of the calculate button.
+  
+          // Launch confetti from the center of the Calculate button.
           var rect = calcButton.getBoundingClientRect();
           var originX = (rect.left + rect.width / 2) / window.innerWidth;
           var originY = (rect.top + rect.height / 2) / window.innerHeight;
