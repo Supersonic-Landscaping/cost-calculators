@@ -114,6 +114,53 @@
     gap: 0.5em; /* Adjust spacing between checkbox and label */
     white-space: nowrap; /* Prevent wrapping if needed */
   }
-  input[type=checkbox], input[type=radio] {
-    margin-bottom: 5px;
+/* Make checkbox visible and consistent */
+.htc-field.inline-disposal input[type="checkbox"] {
+  all: unset;
+  display: inline-block;
+  appearance: checkbox;
+  -webkit-appearance: checkbox;
+  -moz-appearance: checkbox;
+
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+  border: 1px solid #888;
+  border-radius: 2px;
+  box-sizing: border-box;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+/* Optional: Modern styled checked state */
+.htc-field.inline-disposal input[type="checkbox"]:checked {
+  background-color: #178156;
+  border-color: #178156;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 12 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 5.2L4.3 9 11 1' stroke='%23fff' stroke-width='2'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px;
+}
+
+/* Improve label readability and spacing */
+.htc-field.inline-disposal label {
+  display: inline-block;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  color: #555;
+  cursor: pointer;
+}
+
+/* Mobile-friendly sizing */
+@media (max-width: 600px) {
+  .htc-field.inline-disposal input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
   }
+
+  .htc-field.inline-disposal label {
+    font-size: 1rem;
+  }
+}
