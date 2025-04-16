@@ -1,36 +1,50 @@
 import confetti from 'canvas-confetti';
 
 (async function() {
-  // Dynamically load manifest.json from the same origin as the script.
-  let manifest = {};
+  // Try to load the Vite manifest from the root.
+  let manifest = null;
   try {
-    const response = await fetch('https://tools.supersoniclandscaping.com/manifest.json');
-    manifest = await response.json();
+    const resp = await fetch('https://tools.supersoniclandscaping.com/manifest.json');
+    if (resp.ok) {
+      manifest = await resp.json();
+    } else {
+      console.warn('Manifest not found; using fallback CSS URL.');
+    }
   } catch (err) {
-    console.error('Error loading manifest:', err);
+    console.warn('Error fetching manifest:', err, 'Falling back to default CSS URL.');
   }
 
-  // Determine the CSS asset URL from manifest.
-  // The key will be relative to the project root; adjust if needed.
-  // For example, if style.css is imported as 'src/assets/style.css'
-  const styleAsset = manifest['src/assets/style.css'];
-  const cssUrl = styleAsset ? `https://tools.supersoniclandscaping.com/${styleAsset}` : 'https://tools.supersoniclandscaping.com/style.css';
+  // Determine the CSS URL.
+  // If manifest exists and contains the key for your CSS file (adjust the key if needed),
+  // use that path; otherwise, fall back to the absolute URL.
+  // Here we assume that your CSS was imported from 'src/assets/style.css'.
+  const cssKey = 'src/assets/style.css';
+  let cssUrl = "https://tools.supersoniclandscaping.com/style.css"; // fallback
+  if (manifest && manifest[cssKey] && manifest[cssKey].file) {
+    cssUrl = `https://tools.supersoniclandscaping.com/${manifest[cssKey].file}`;
+  }
 
-  // Check if a link with our CSS is already present; if not, add it.
-  if (!document.querySelector(`link[href^="https://tools.supersoniclandscaping.com/"]`)) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
+  // Ensure the link element for the stylesheet is added.
+  var existingLink = document.querySelector(`link[href^="https://tools.supersoniclandscaping.com/"]`);
+  if (existingLink) {
+    existingLink.href = cssUrl;
+  } else {
+    var link = document.createElement("link");
+    link.rel = "stylesheet";
     link.href = cssUrl;
     document.head.appendChild(link);
   }
 
   document.addEventListener("DOMContentLoaded", function() {
     var calculators = document.getElementsByClassName("supersonic-hedgetrimming-calculator");
+
     for (var i = 0; i < calculators.length; i++) {
+      // Get custom title or default.
       var titleText = calculators[i].getAttribute("data-title") || "Hedge Trimming Estimate";
       var baseFeeStr = calculators[i].getAttribute("data-base-fee");
       var baseFee = (baseFeeStr && !isNaN(parseFloat(baseFeeStr))) ? parseFloat(baseFeeStr) : 100;
-      // Inject widget HTML, including a disposal checkbox
+      
+      // Inject the widget HTML including a disposal fee checkbox.
       calculators[i].innerHTML = `
         <div class="htc-widget" itemscope itemtype="https://schema.org/WebApplication">
           <meta itemprop="name" content="${titleText}">
@@ -79,29 +93,31 @@ import confetti from 'canvas-confetti';
           var priceEl = document.getElementById("htc-price-" + index);
           var disposalChecked = document.getElementById("htc-disposal-" + index).checked;
           var disposalFee = 50;
-  
+          
           if (isNaN(length) || length <= 0 || isNaN(height) || height <= 0) {
             priceEl.innerText = "Please enter valid hedge length and height.";
             return;
           }
-  
+          
+          // Rate per foot: $3.25 for hedges under 6 ft; $4.50 for hedges 6 ft or taller.
           var ratePerFoot = (height >= 6) ? 4.50 : 3.25;
           var cost = length * ratePerFoot;
-  
+          
           if (disposalChecked) {
             cost += disposalFee;
           }
-  
+          
           if (cost < 75) {
             cost = 75;
           }
-  
+          
           priceEl.innerText = "$" + cost.toFixed(2);
-  
+          
+          // Confetti: launch from the center of the calculate button.
           var rect = calcButton.getBoundingClientRect();
           var originX = (rect.left + rect.width / 2) / window.innerWidth;
           var originY = (rect.top + rect.height / 2) / window.innerHeight;
-  
+          
           confetti({
             particleCount: 100,
             spread: 70,
@@ -112,4 +128,5 @@ import confetti from 'canvas-confetti';
     }
   });
 })();
+
 
