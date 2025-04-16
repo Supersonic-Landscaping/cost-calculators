@@ -11,7 +11,7 @@ export default defineConfig({
       input: {
         hedge:       resolve(__dirname, './hedge/script.js'),
         mowing:      resolve(__dirname, './mowing/script.js'),
-        yardDirt:    resolve(__dirname, './yard‑dirt/script.js'),  // renamed key!
+        yardDirt:    resolve(__dirname, './yard-dirt/script.js'),  // renamed key!
         mulching:    resolve(__dirname, './mulching/script.js')
       },
       output: {
