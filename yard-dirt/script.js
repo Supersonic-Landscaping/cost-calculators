@@ -297,7 +297,7 @@ import confetti from 'canvas-confetti';
               <option value="m">$/m³</option>
             </select>
           </div>
-          <button id="calc-${idx}">Calculate</button>
+          <button class="button" id="calc-${idx}">Calculate</button>
 
           <!-- Results -->
           <div id="results-${idx}" class="dirt-results">
