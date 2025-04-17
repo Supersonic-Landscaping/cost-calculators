@@ -192,7 +192,10 @@
 .dirt-widget fieldset.active {
   display: block;
 }
-
+/* right after your existing rules */
+.dirt-widget fieldset.optional-cost-calculation {
+  display: block !important;
+}
 /* Legend styling */
 .dirt-widget legend {
   font-weight: bold;
