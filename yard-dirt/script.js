@@ -285,18 +285,20 @@ import confetti from 'canvas-confetti';
             </div>
           </fieldset>
 
-          <!-- Price & Calculate -->
-          <div class="dirt-field">
-            <label for="price-${idx}">Price:</label>
-            <input type="number" id="price-${idx}" min="0">
-            <select id="price-unit-${idx}">
-              <option value="in">$/in³</option>
-              <option value="ft">$/ft³</option>
-              <option value="yd">$/yd³</option>
-              <option value="cm">$/cm³</option>
-              <option value="m">$/m³</option>
-            </select>
-          </div>
+          <!-- Optional cost calculation -->
+<fieldset class="optional-cost-calculation">
+  <legend>Cost basis (optional)</legend>
+  <div class="dirt-field">
+    <label for="price-${idx}">Price:</label>
+    <input type="number" id="price-${idx}" min="0" placeholder="0.00">
+    <select id="price-unit-${idx}">
+      <option value="yd">per cubic yard</option>
+      <option value="ft">per cubic foot</option>
+      <option value="m">per cubic meter</option>
+    </select>
+  </div>
+</fieldset>
+
           <button class="button" id="calc-${idx}">Calculate</button>
 
           <!-- Results -->
