@@ -105,7 +105,7 @@ import confetti from 'canvas-confetti';
             <p><strong>Estimated Cost:</strong> <span class="fence-cost">—</span></p>
           </div>
 
-          <p class="fence-disclaimer" style="font-size:12px;">* $${MIN_CHARGE.toLocaleString()} minimum charge. Gates, double gates, and old fence removal are extra. Conditions may apply*. <strong>Contact us for a final quote.</strong></p>
+          <p class="fence-disclaimer" style="font-size:12px;">* $${MIN_CHARGE.toLocaleString()} minimum charge. Gates, double gates, and old fence removal are extra. <strong>Contact us for a final quote.</strong></p>
           <small class="fence-credit">
             <a href="https://www.supersoniclandscaping.com/landscaping-calculators/fencing-cost-calculator" target="_blank" rel="noopener">This calculator</a> is provided by 
             <a href="https://www.supersoniclandscaping.com" target="_blank" rel="noopener">Supersonic Landscaping</a>.
