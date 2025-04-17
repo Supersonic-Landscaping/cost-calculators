@@ -1,0 +1,17 @@
+# /_headers (project root)
+
+# Hedge widget: cache hash‑named JS for a year
+/hedge/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# Mowing widget
+/mowing/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# Yard‑dirt widget
+/yardDirt/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# Mulching widget
+/mulching/*.js
+  Cache-Control: public, max-age=31536000, immutable

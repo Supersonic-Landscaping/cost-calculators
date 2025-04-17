@@ -1,33 +1,30 @@
 import fs from 'fs';
 import path from 'path';
 
-// Copy calculator files for each widget.
 const calculators = ['hedge', 'mowing', 'yardDirt', 'mulching'];
 
 calculators.forEach(name => {
-  const dir = `./dist/${name}`;
+  const dir = path.join('dist', name);
   const files = fs.readdirSync(dir);
-  const latest = files.find(f => f.startsWith(`${name}-calculator.`) && f.endsWith('.js'));
-  if (latest) {
-    fs.copyFileSync(
-      path.join(dir, latest),
-      path.join(dir, `${name}-calculator.js`)
-    );
-    console.log(`✅ Copied ${latest} → ${name}-calculator.js`);
-  } else {
+  const latest = files.find(f =>
+    f.startsWith(`${name}-calculator.`) && f.endsWith('.js')
+  );
+
+  if (!latest) {
     console.warn(`⚠️  No output found for ${name}`);
+    return;
   }
+
+  // remove any stale un-hashed file first
+  files
+    .filter(f => f === `${name}-calculator.js`)
+    .forEach(f => fs.unlinkSync(path.join(dir, f)));
+
+  // copy the hash-named file to the stable name
+  fs.copyFileSync(
+    path.join(dir, latest),
+    path.join(dir, `${name}-calculator.js`)
+  );
+  console.log(`✅ Copied ${latest} → ${name}-calculator.js`);
 });
-
-// Copy manifest.json from the .vite folder to the root of dist.
-const viteDir = './dist/.vite';
-const manifestSrc = path.join(viteDir, 'manifest.json');
-const manifestDest = path.join('./dist', 'manifest.json');
-
-if (fs.existsSync(viteDir) && fs.existsSync(manifestSrc)) {
-  fs.copyFileSync(manifestSrc, manifestDest);
-  console.log("✅ Copied manifest.json from .vite folder to dist root");
-} else {
-  console.warn("⚠️  manifest.json not found in dist/.vite");
-}
 
