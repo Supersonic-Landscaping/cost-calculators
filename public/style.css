@@ -57,7 +57,8 @@
   
   .htc-disclaimer,
   .lmc-disclaimer,
-  .smc-disclaimer {
+  .smc-disclaimer,
+  .cdm-disclaimer {
     font-size: 12px !important;
     text-align: left;
     margin-top: 16px;
@@ -67,7 +68,8 @@
   .htc-credit,
   .lmc-credit,
   .smc-credit,
-  .dirt-credit {
+  .dirt-credit,
+  .cdm-credit {
     font-size: 10px !important;
     text-align: left;
     margin-top: 8px;
@@ -77,7 +79,8 @@
   .htc-credit a,
   .lmc-credit a,
   .smc-credit a,
-  .dirt-credit a {
+  .dirt-credit a,
+  .cdm-credit a {
     color: #888;
   }
   

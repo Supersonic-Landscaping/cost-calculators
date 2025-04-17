@@ -70,7 +70,7 @@ import confetti from 'canvas-confetti';
             </select>
           </div>
 
-          <button id="cdm-calc-${idx}">Calculate</button>
+          <button class="button" id="cdm-calc-${idx}">Calculate</button>
 
           <div class="cdm-results">
             <p><strong>Total Cost:</strong> <span id="cdm-cost-${idx}">—</span></p>
