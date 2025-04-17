@@ -75,8 +75,8 @@ import confetti from 'canvas-confetti';
             <p><strong>Total Cost:</strong> <span id="cdm-cost-${idx}">—</span></p>
           </div>
 
-          <p class="cdm-disclaimer">*This estimate does not include permit fees or taxes. Contact us for a final quote.*</p>
-          <p class="cdm-credit">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
+          <p class="cdm-disclaimer" style="font-size: 12px">*This estimate does not include permit fees or taxes. Contact us for a final quote.*</p>
+          <p class="cdm-credit" style="font-size: 10px">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
         </div>
       `;
 
