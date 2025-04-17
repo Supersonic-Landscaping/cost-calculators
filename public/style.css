@@ -226,72 +226,54 @@
   font-size: 1rem;
   margin: 8px 0;
 }
-/* ===== Stylish Large Black & White Radio Buttons ===== */
+/* ===== Updated Black & White Radio Buttons for .fence-field ===== */
 
 .fence-field {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
+  display: block;           /* each option on its own line */
   margin-bottom: 1em;
 }
 
 .fence-field label {
   display: flex;
   align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.75em;    /* space between options */
   font-size: 1rem;
   color: #333;
   cursor: pointer;
   user-select: none;
 }
 
-/* Hide the native radio */
+/* Remove native radio appearance, size the custom circle */
 .fence-field input[type="radio"] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-/* Custom radio circle */
-.fence-field input[type="radio"] + span,
-.fence-field input[type="radio"] + * {
-  position: relative;
-  padding-left: 2em;
-}
-
-/* Outer circle */
-.fence-field input[type="radio"] + span::before,
-.fence-field input[type="radio"] + *::before {
-  content: "";
-  display: inline-block;
-  width: 1.2em;
-  height: 1.2em;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 1em;
+  height: 1em;
   border: 2px solid #000;
   border-radius: 50%;
-  background: #fff;
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
 }
 
-/* Inner dot on checked */
-.fence-field input[type="radio"]:checked + span::after,
-.fence-field input[type="radio"]:checked + *::after {
+/* Inner dot (scaled from 0 to 1) */
+.fence-field input[type="radio"]::before {
   content: "";
-  display: inline-block;
-  width: 0.6em;
-  height: 0.6em;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0.5em;
+  height: 0.5em;
   background: #000;
   border-radius: 50%;
-  position: absolute;
-  left: 0.3em;
-  top: 50%;
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%) scale(0);
+  transition: transform 0.15s ease-in-out;
 }
 
-/* Ensure label text aligns */
-.fence-field label span,
-.fence-field label *:not(input) {
-  margin-left: 0.5em;
+/* Show the dot when checked */
+.fence-field input[type="radio"]:checked::before {
+  transform: translate(-50%, -50%) scale(1);
 }
+
