@@ -16,15 +16,15 @@ import confetti from 'canvas-confetti';
     const widgets = document.getElementsByClassName('supersonic-concrete-calculator');
     Array.from(widgets).forEach((widget, idx) => {
       // 3) Read customizable data-attributes (with defaults)
-      const laborRate       = parseFloat(widget.getAttribute('data-labor-rate'))       || 4.5;
-      const rebarSurcharge  = parseFloat(widget.getAttribute('data-rebar-surcharge'))  || 1.5;
-      const haulCost        = parseFloat(widget.getAttribute('data-haul-cost'))        || 1.25;
-      const accessMultiplier= parseFloat(widget.getAttribute('data-access-multiplier'))|| 1.25;
-      const minimumCharge   = parseFloat(widget.getAttribute('data-minimum-charge'))   || 600;
+      const laborRate        = parseFloat(widget.getAttribute('data-labor-rate'))        || 4.5;
+      const rebarSurcharge   = parseFloat(widget.getAttribute('data-rebar-surcharge'))   || 1.5;
+      const haulCost         = parseFloat(widget.getAttribute('data-haul-cost'))         || 1.25;
+      const accessMultiplier = parseFloat(widget.getAttribute('data-access-multiplier')) || 1.25;
+      const minimumCharge    = parseFloat(widget.getAttribute('data-minimum-charge'))    || 600;
 
       // 4) Define thickness & method multipliers
       const thicknessMult = { '4-6"': 1, '6-8"': 1.2, '8+"': 1.4 };
-      const methodMult    = { 'Manual': 1,      'Mechanical': 0.8 };
+      const methodMult    = { 'Manual': 1, 'Mechanical': 0.8 };
 
       // 5) Build the widget UI
       widget.innerHTML = `
@@ -49,8 +49,7 @@ import confetti from 'canvas-confetti';
             <label for="cdm-reinforce-${idx}">Reinforcement:</label>
             <select id="cdm-reinforce-${idx}">
               <option value="None">None</option>
-              <option value="Wire Mesh">Wire Mesh</option>
-              <option value="Rebar">Rebar</option>
+              <option value="Reinforced">Mesh Wire or Rebar</option>
             </select>
           </div>
 
@@ -100,7 +99,7 @@ import confetti from 'canvas-confetti';
         let total = area * laborRate * (thicknessMult[thickness] || 1) * (methodMult[method] || 1);
 
         // Reinforcement surcharge
-        if (reinforce !== 'None') {
+        if (reinforce === 'Reinforced') {
           total += area * rebarSurcharge;
         }
 
