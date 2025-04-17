@@ -1,3 +1,15 @@
+// fence-calculator/script.js
+// Supersonic Landscaping — Fence Cost Calculator Widget
+// -----------------------------------------------------
+// Drop the compiled bundle with:
+// <div class="supersonic-fence-calculator"
+//      data-title="Fence Cost Estimator"
+//      data-basic-4x4="57" data-basic-6x6="60"
+//      data-full-4x4="65"  data-full-6x6="68"
+//      data-min-charge="3000"></div>
+// <script src="https://tools.supersoniclandscaping.com/fence-calculator/fence-calculator.js" crossorigin="anonymous"></script>
+// -----------------------------------------------------
+
 import confetti from 'canvas-confetti';
 
 (function () {
@@ -71,15 +83,15 @@ import confetti from 'canvas-confetti';
           <h3>${titleText}</h3>
 
           <div class="fence-field" itemscope itemtype="https://schema.org/Thing">
-            <label>Fence Style:</label><br>
-            <label><input type="radio" name="${styleName}" value="basic" checked> Basic Privacy</label>
-            <label><input type="radio" name="${styleName}" value="full"> Full / Semi‑Privacy</label>
+            <label>Fence Style:</label>
+            <label><input type="radio" name="${styleName}" value="basic" checked><span>Basic Privacy</span></label>
+            <label><input type="radio" name="${styleName}" value="full"><span>Full / Semi‑Privacy</span></label>
           </div>
 
           <div class="fence-field">
-            <label>Post Size:</label><br>
-            <label><input type="radio" name="${postName}" value="4x4" checked> 4×4</label>
-            <label><input type="radio" name="${postName}" value="6x6"> 6×6</label>
+            <label>Post Size:</label>
+            <label><input type="radio" name="${postName}" value="4x4" checked><span>4×4</span></label>
+            <label><input type="radio" name="${postName}" value="6x6"><span>6×6</span></label>
           </div>
 
           <div class="fence-field">
@@ -93,9 +105,9 @@ import confetti from 'canvas-confetti';
             <p><strong>Estimated Cost:</strong> <span class="fence-cost">—</span></p>
           </div>
 
-          <p class="fence-disclaimer" style="font-size:12px;">* $${MIN_CHARGE.toLocaleString()} minimum charge. Gates, double gates, and old fence removal are extra. Conditions may apply.</p>
+          <p class="fence-disclaimer" style="font-size:12px;">* $${MIN_CHARGE.toLocaleString()} minimum charge. Gates, double gates, and old fence removal are extra. Conditions may apply*. <strong>Contact us for a final quote.</strong></p>
           <small class="fence-credit">
-            <a href="https://www.supersoniclandscaping.com/landscaping-calculators/fence-cost" target="_blank" rel="noopener">This calculator</a> is provided by 
+            <a href="https://www.supersoniclandscaping.com/landscaping-calculators/fencing-cost-calculator" target="_blank" rel="noopener">This calculator</a> is provided by 
             <a href="https://www.supersoniclandscaping.com" target="_blank" rel="noopener">Supersonic Landscaping</a>.
           </small>
         </div>`;
