@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-const calculators = ['hedge', 'mowing', 'yardDirt', 'mulching'];
+const calculators = ['hedge', 'mowing', 'yardDirt', 'mulching', 'concrete-demolition'];
 
 calculators.forEach(name => {
   const dir = path.join('dist', name);

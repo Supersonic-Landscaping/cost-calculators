@@ -1,4 +1,3 @@
-// vite.config.js
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
@@ -20,7 +19,8 @@ export default defineConfig({
         hedge:       resolve(__dirname, './hedge/script.js'),
         mowing:      resolve(__dirname, './mowing/script.js'),
         yardDirt:    resolve(__dirname, './yard-dirt/script.js'),
-        mulching:    resolve(__dirname, './mulching/script.js')
+        mulching:    resolve(__dirname, './mulching/script.js'),
+        'concrete-demolition': resolve(__dirname, './concrete-demolition/script.js')
       },
       output: {
         entryFileNames:   `[name]/[name]-calculator.[hash].js`,
