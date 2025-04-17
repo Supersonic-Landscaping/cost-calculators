@@ -20,7 +20,7 @@ export default defineConfig({
         mowing:      resolve(__dirname, './mowing/script.js'),
         yardDirt:    resolve(__dirname, './yard-dirt/script.js'),
         mulching:    resolve(__dirname, './mulching/script.js'),
-        fencing:    resolve(__dirname, './mulching/fencing.js'),
+        fencing:    resolve(__dirname, './fencing/script.js'),
         'concrete-demolition': resolve(__dirname, './concrete-demolition/script.js')
       },
       output: {

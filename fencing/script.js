@@ -1,15 +1,3 @@
-// fence-calculator/script.js
-// Supersonic Landscaping — Fence Cost Calculator Widget
-// -----------------------------------------------------
-// Drop the compiled bundle with:
-// <div class="supersonic-fence-calculator"
-//      data-title="Fence Cost Estimator"
-//      data-basic-4x4="57" data-basic-6x6="60"
-//      data-full-4x4="65"  data-full-6x6="68"
-//      data-min-charge="3000"></div>
-// <script src="https://tools.supersoniclandscaping.com/fence-calculator/fence-calculator.js" crossorigin="anonymous"></script>
-// -----------------------------------------------------
-
 import confetti from 'canvas-confetti';
 
 (function () {
