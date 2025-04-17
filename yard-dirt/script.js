@@ -311,7 +311,7 @@ import confetti from 'canvas-confetti';
             </p>
           </div>
 
-          <p class="dirt-credit">
+          <p class="dirt-credit" style="font-style: 11px;">
             Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a>
           </p>
         </div>

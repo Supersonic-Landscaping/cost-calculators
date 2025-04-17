@@ -164,9 +164,56 @@
     font-size: 1rem;
   }
 }
-
 /* Dirt Calculator Specific */
-.dirt-widget .dirt-field { margin-bottom: 12px; }
-.dirt-widget fieldset { border: 1px solid #ccc; padding: 12px; margin: 12px 0; display: none; }
-.dirt-widget legend { font-weight: bold; margin-bottom: 8px; }
-.dirt-widget .dirt-results p { font-size: 1rem; margin: 8px 0; }
+.dirt-widget {
+  font-family: inherit;
+}
+
+/* Field rows: label ▷ input ▷ unit */
+.dirt-widget .dirt-field {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* Visible fieldset when active; otherwise hidden */
+.dirt-widget fieldset {
+  display: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 12px;
+  margin: 12px 0;
+}
+.dirt-widget fieldset.active {
+  display: block;
+}
+
+/* Legend styling */
+.dirt-widget legend {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+/* Inputs & selects fill their columns */
+.dirt-widget .dirt-field label {
+  white-space: nowrap;
+}
+.dirt-widget .dirt-field input,
+.dirt-widget .dirt-field select {
+  width: 100%;
+  margin: 0;
+  padding: 6px 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/* Results paragraphs */
+.dirt-widget .dirt-results p {
+  font-size: 1rem;
+  margin: 8px 0;
+}
+
