@@ -313,9 +313,14 @@ import confetti from 'canvas-confetti';
             </p>
           </div>
 
-          <p class="dirt-credit" style="font-style: 11px;">
-            Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a>
-          </p>
+          <small style="font-size: 10px;">
+  <a href="https://www.supersoniclandscaping.com/landscaping-calculators/yard-calculator-for-dirt" target="_blank" rel="noopener">
+    This calculator
+  </a> is provided by 
+  <a href="https://www.supersoniclandscaping.com" target="_blank" rel="noopener">
+    Supersonic Landscaping
+  </a>.
+</small>
         </div>
       `;
 

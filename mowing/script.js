@@ -72,7 +72,14 @@ import confetti from 'canvas-confetti';
             <p><strong>Final Cost:</strong> <span id="lmc-cost-${i}">—</span></p>
           </div>
           <p class="lmc-disclaimer" style="font-size:12px;">*Note: This estimate includes only labor costs.</p>
-          <p class="lmc-credit">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
+          <small style="font-size: 10px;">
+  <a href="https://www.supersoniclandscaping.com/landscaping-calculators/lawn-mowing-cost" target="_blank" rel="noopener">
+    This calculator
+  </a> is provided by 
+  <a href="https://www.supersoniclandscaping.com" target="_blank" rel="noopener">
+    Supersonic Landscaping
+  </a>.
+</small>
         </div>
       `;
 

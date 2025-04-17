@@ -66,7 +66,14 @@ import confetti from 'canvas-confetti';
             <p><strong>Estimated Price:</strong> <span id="htc-price-${i}">—</span></p>
           </div>
           <p class="htc-disclaimer" style="font-size:12px;">*This estimate includes labor and equipment costs. Disposal fees are not included.</p>
-          <p class="htc-credit">Tool by <a href="https://www.supersoniclandscaping.com" target="_blank">Supersonic Landscaping</a></p>
+<small style="font-size: 10px;">
+  <a href="https://www.supersoniclandscaping.com/landscaping-calculators/hedge-trimming-cost-calculator" target="_blank" rel="noopener">
+    This calculator
+  </a> is provided by 
+  <a href="https://www.supersoniclandscaping.com" target="_blank" rel="noopener">
+    Supersonic Landscaping
+  </a>.
+</small>
         </div>
       `;
   
