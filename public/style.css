@@ -66,8 +66,9 @@
   
   .htc-credit,
   .lmc-credit,
-  .smc-credit {
-    font-size: 12px !important;
+  .smc-credit,
+  .dirt-credit {
+    font-size: 10px !important;
     text-align: left;
     margin-top: 8px;
     color: #888;
@@ -75,7 +76,8 @@
   
   .htc-credit a,
   .lmc-credit a,
-  .smc-credit a {
+  .smc-credit a,
+  .dirt-credit a {
     color: #888;
   }
   
@@ -151,6 +153,7 @@
   line-height: 1.4;
   color: #555;
   cursor: pointer;
+  min-width: 125px;
 }
 
 /* Mobile-friendly sizing */
