@@ -76,7 +76,7 @@ import confetti from 'canvas-confetti';
               * Excludes permits & taxes. Contact us for a firm quote.
             </p>
             <small class="asdw-credit" style="font-size:10px">
-              <a href="https://www.supersoniclandscaping.com/landscaping-calculators/asphalt-driveway-cost-calculator" target="_blank" rel="noopener">
+              <a href="https://www.supersoniclandscaping.com/landscaping-calculators/asphalt-driveway-cost-calculator/" target="_blank" rel="noopener">
                 This calculator
               </a> by 
               <a href="https://www.supersoniclandscaping.com" target="_blank" rel="noopener">
