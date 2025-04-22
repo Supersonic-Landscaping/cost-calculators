@@ -277,3 +277,68 @@
   transform: translate(-50%, -50%) scale(1);
 }
 
+/* Field rows */
+.sdw-field {
+  margin-bottom: 12px;
+}
+.sdw-field label {
+  display: block;
+  font-size: 0.9em;
+  margin-bottom: 4px;
+  color: #555;
+}
+.sdw-field input[type="number"],
+.sdw-field select {
+  width: calc(100% - 12px);
+  padding: 5px;
+  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+.sdw-field input[type="checkbox"] {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.sdw-field input[type="radio"] {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* Results area */
+.sdw-results p {
+  font-size: 16px;
+  text-align: left;
+  margin-top: 24px;
+  color: #333;
+}
+
+/* Disclaimer text */
+.sdw-disclaimer {
+  font-size: 12px !important;
+  text-align: left;
+  margin-top: 16px;
+  color: #888;
+}
+
+/* Credit link styling */
+.sdw-widget small {
+  font-size: 10px !important;
+  text-align: left;
+  margin-top: 8px;
+  display: block;
+  color: #888;
+}
+.sdw-widget small a {
+  color: #888;
+  text-decoration: none;
+}
+.sdw-widget small a:hover {
+  text-decoration: underline;
+}
+
+/* Button spacing */
+.sdw-widget button {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
