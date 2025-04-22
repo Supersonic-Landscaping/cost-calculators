@@ -83,7 +83,7 @@ import confetti from 'canvas-confetti';
             <label><input type="checkbox" id="sdw-grade-${idx}"/> Extra Site Grading (+$${gradingSurcharge}/sq ft)</label>
           </div>
 
-          <button id="sdw-calc-${idx}">Calculate</button>
+          <button class="button" id="sdw-calc-${idx}">Calculate</button>
 
           <div class="sdw-results">
             <p><strong>Total Cost:</strong> <span id="sdw-cost-${idx}">—</span></p>
@@ -93,7 +93,7 @@ import confetti from 'canvas-confetti';
             * Estimates exclude permits & taxes. Contact us for a firm quote.
           </p>
           <small style="font-size:10px">
-            <a href="https://www.supersoniclandscaping.com/landscaping-calculators/concrete-driveway-calculator" target="_blank" rel="noopener">
+            <a href="https://www.supersoniclandscaping.com/landscaping-calculators/concrete-driveway" target="_blank" rel="noopener">
               Concrete Driveway Calculator
             </a> by 
             <a href="https://www.supersoniclandscaping.com/" target="_blank" rel="noopener">
