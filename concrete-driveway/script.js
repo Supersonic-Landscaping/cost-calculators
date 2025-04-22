@@ -96,7 +96,7 @@ import confetti from 'canvas-confetti';
             <a href="https://www.supersoniclandscaping.com/landscaping-calculators/concrete-driveway-calculator" target="_blank" rel="noopener">
               Concrete Driveway Calculator
             </a> by 
-            <a href="https://www.supersoniclandscaping.com" target="_blank" rel="noopener">
+            <a href="https://www.supersoniclandscaping.com/" target="_blank" rel="noopener">
               Supersonic Landscaping
             </a>
           </small>
