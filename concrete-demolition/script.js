@@ -77,7 +77,7 @@ import confetti from 'canvas-confetti';
 
           <p class="cdm-disclaimer" style="font-size: 12px">*This estimate does not include permit fees or taxes. Contact us for a final quote.*</p>
 <small style="font-size: 10px;">
-  <a href="https://www.supersoniclandscaping.com/landscaping-calculators/concrete-demolition-cost-calculator" target="_blank" rel="noopener">
+  <a href="https://www.supersoniclandscaping.com/landscaping-calculators/concrete-driveway" target="_blank" rel="noopener">
     This calculator
   </a> is provided by 
   <a href="https://www.supersoniclandscaping.com" target="_blank" rel="noopener">
