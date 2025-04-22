@@ -22,7 +22,8 @@ export default defineConfig({
         mulching:    resolve(__dirname, './mulching/script.js'),
         fencing:    resolve(__dirname, './fencing/script.js'),
         'concrete-demolition': resolve(__dirname, './concrete-demolition/script.js'),
-        'concrete-driveway':   resolve(__dirname, './concrete-driveway/script.js')
+        'concrete-driveway':   resolve(__dirname, './concrete-driveway/script.js'),
+        'asphalt-driveway':    resolve(__dirname, './asphalt-driveway/script.js')
       },
       output: {
         entryFileNames:   `[name]/[name]-calculator.[hash].js`,
