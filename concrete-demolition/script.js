@@ -1,124 +1,135 @@
-// File: /concrete-driveway/script.js
+// Folder: /concrete-demolition/script.js
 import confetti from 'canvas-confetti';
 
 (() => {
+  // 1) Load shared stylesheet if missing
   const CSS_HREF = 'https://tools.supersoniclandscaping.com/style.css';
   if (!document.querySelector(`link[href="${CSS_HREF}"]`)) {
     const link = document.createElement('link');
-    link.rel  = 'stylesheet';
+    link.rel = 'stylesheet';
     link.href = CSS_HREF;
     document.head.appendChild(link);
   }
 
+  // 2) Widget initialization on DOM ready
   document.addEventListener('DOMContentLoaded', () => {
-    const widgets = document.getElementsByClassName('supersonic-driveway-calculator');
+    const widgets = document.getElementsByClassName('supersonic-demolition-calculator');
     Array.from(widgets).forEach((widget, idx) => {
-      // Read your data‑attributes or use defaults
-      const baseRate         = parseFloat(widget.dataset.baseRate)         || 8.00;
-      const demoRate         = parseFloat(widget.dataset.demolitionRate)   || 2.00;
-      const coloredSurcharge = parseFloat(widget.dataset.coloredSurcharge) || 3.00;
-      const exposedSurcharge = parseFloat(widget.dataset.exposedSurcharge) || 4.00;
-      const stampedSurcharge = parseFloat(widget.dataset.stampedSurcharge) || 8.00;
-      const rebarSurcharge   = parseFloat(widget.dataset.rebarSurcharge)   || 2.00;
-      const drainFee         = parseFloat(widget.dataset.drainFee)         || 1000;
-      const gradingSurcharge = parseFloat(widget.dataset.gradingSurcharge) || 1.00;
-      const minimumCharge    = parseFloat(widget.dataset.minimumCharge)    || 3000;
+      // 3) Read customizable data-attributes (with defaults)
+      const laborRate        = parseFloat(widget.getAttribute('data-labor-rate'))        || 4.5;
+      const rebarSurcharge   = parseFloat(widget.getAttribute('data-rebar-surcharge'))   || 1.5;
+      const haulCost         = parseFloat(widget.getAttribute('data-haul-cost'))         || 1.25;
+      const accessMultiplier = parseFloat(widget.getAttribute('data-access-multiplier')) || 1.25;
+      const minimumCharge    = parseFloat(widget.getAttribute('data-minimum-charge'))    || 600;
 
-      // Build a super-compact UI: just total area + your existing options
+      // 4) Define thickness & method multipliers
+      const thicknessMult = { '4-6"': 1, '6-8"': 1.2, '8+"': 1.4 };
+      const methodMult    = { 'Manual': 1, 'Mechanical': 0.8 };
+
+      // 5) Build the widget UI
       widget.innerHTML = `
-        <div class="sdw-widget">
-          <h3>Concrete Driveway Cost Calculator</h3>
-          
-          <div class="sdw-field">
-            <label for="sdw-area-${idx}">Total Area (sq ft):</label>
-            <input type="number" id="sdw-area-${idx}" placeholder="e.g. 600" min="0" step="any"/>
+        <div class="cdm-widget">
+          <h3>Concrete Demolition Cost Calculator</h3>
+
+          <div class="cdm-field">
+            <label for="cdm-area-${idx}">Total Area (sq ft):</label>
+            <input type="number" id="cdm-area-${idx}" placeholder="e.g. 500" />
           </div>
 
-          <div class="sdw-field">
-            <label>Demo existing slab?</label>
-            <label><input type="radio" name="sdw-demo-${idx}" value="no" checked/> No</label>
-            <label><input type="radio" name="sdw-demo-${idx}" value="yes"/> Yes (+$${demoRate}/sq ft)</label>
-          </div>
-
-          <div class="sdw-field">
-            <label>Finish Type:</label>
-            <select id="sdw-finish-${idx}">
-              <option value="base">Standard Broom (base rate)</option>
-              <option value="colored">Colored (+$${coloredSurcharge}/sq ft)</option>
-              <option value="exposed">Exposed Agg. (+$${exposedSurcharge}/sq ft)</option>
-              <option value="stamped">Stamped (+$${stampedSurcharge}/sq ft)</option>
+          <div class="cdm-field">
+            <label for="cdm-thickness-${idx}">Slab Thickness:</label>
+            <select id="cdm-thickness-${idx}">
+              <option value="4-6\"">4"–6"</option>
+              <option value="6-8\"">6"–8"</option>
+              <option value="8+\"">8"+</option>
             </select>
           </div>
 
-          <div class="sdw-field">
-            <label><input type="checkbox" id="sdw-rebar-${idx}"/> Add Rebar (+$${rebarSurcharge}/sq ft)</label>
-          </div>
-          <div class="sdw-field">
-            <label><input type="checkbox" id="sdw-drain-${idx}"/> Include Trench Drain (+$${drainFee} flat)</label>
-          </div>
-          <div class="sdw-field">
-            <label><input type="checkbox" id="sdw-grade-${idx}"/> Extra Grading (+$${gradingSurcharge}/sq ft)</label>
+          <div class="cdm-field">
+            <label for="cdm-reinforce-${idx}">Reinforcement:</label>
+            <select id="cdm-reinforce-${idx}">
+              <option value="None">None</option>
+              <option value="Reinforced">Mesh Wire or Rebar</option>
+            </select>
           </div>
 
-          <button class="button" id="sdw-calc-${idx}">Calculate</button>
-
-          <div class="sdw-results">
-            <p><strong>Total Cost:</strong> <span id="sdw-cost-${idx}">—</span></p>
+          <div class="cdm-field">
+            <label for="cdm-method-${idx}">Demolition Method:</label>
+            <select id="cdm-method-${idx}">
+              <option value="Manual">Manual</option>
+              <option value="Mechanical">Mechanical</option>
+            </select>
           </div>
-          
-          <p class="sdw-disclaimer" style="font-size:12px">
-            * Excludes permits & taxes. Contact us for a firm quote.
-          </p>
-          <small style="font-size: 10px;">
-  <a href="https://www.supersoniclandscaping.com/landscaping-calculators/concrete-driveway" target="_blank" rel="noopener">
+
+          <div class="cdm-field">
+            <label for="cdm-access-${idx}">Site Access:</label>
+            <select id="cdm-access-${idx}">
+              <option value="Easy">Easy Access</option>
+              <option value="Limited">Limited Access</option>
+            </select>
+          </div>
+
+          <button class="button" id="cdm-calc-${idx}">Calculate</button>
+
+          <div class="cdm-results">
+            <p><strong>Total Cost:</strong> <span id="cdm-cost-${idx}">—</span></p>
+          </div>
+
+          <p class="cdm-disclaimer" style="font-size: 12px">*This estimate does not include permit fees or taxes. Contact us for a final quote.*</p>
+<small style="font-size: 10px;">
+  <a href="https://www.supersoniclandscaping.com/landscaping-calculators/concrete-demolition-cost-calculator" target="_blank" rel="noopener">
     This calculator
   </a> is provided by 
   <a href="https://www.supersoniclandscaping.com" target="_blank" rel="noopener">
     Supersonic Landscaping
   </a>.
 </small>
+
         </div>
       `;
 
-      // Calculation logic
-      document.getElementById(`sdw-calc-${idx}`).addEventListener('click', () => {
-        const area = parseFloat(document.getElementById(`sdw-area-${idx}`).value);
-        const costEl = document.getElementById(`sdw-cost-${idx}`);
+      // 6) Calculation logic
+      const btn = document.getElementById(`cdm-calc-${idx}`);
+      btn.addEventListener('click', () => {
+        const area       = parseFloat(document.getElementById(`cdm-area-${idx}`).value);
+        const thickness  = document.getElementById(`cdm-thickness-${idx}`).value;
+        const reinforce  = document.getElementById(`cdm-reinforce-${idx}`).value;
+        const method     = document.getElementById(`cdm-method-${idx}`).value;
+        const access     = document.getElementById(`cdm-access-${idx}`).value;
+        const costEl     = document.getElementById(`cdm-cost-${idx}`);
+
         if (isNaN(area) || area <= 0) {
-          costEl.innerText = 'Enter valid area.';
+          costEl.innerText = 'Please enter a valid area.';
           return;
         }
 
-        let total = area * baseRate;
+        // Base cost (area × labor × thickness × method)
+        let total = area * laborRate * (thicknessMult[thickness] || 1) * (methodMult[method] || 1);
 
-        // Demo
-        if (document.querySelector(`input[name="sdw-demo-${idx}"]:checked`).value === 'yes') {
-          total += area * demoRate;
+        // Reinforcement surcharge
+        if (reinforce === 'Reinforced') {
+          total += area * rebarSurcharge;
         }
 
-        // Finish surcharge
-        switch (document.getElementById(`sdw-finish-${idx}`).value) {
-          case 'colored': total += area * coloredSurcharge; break;
-          case 'exposed': total += area * exposedSurcharge; break;
-          case 'stamped': total += area * stampedSurcharge; break;
+        // Hauling & disposal
+        total += area * haulCost;
+
+        // Site access adjustment
+        if (access === 'Limited') {
+          total *= accessMultiplier;
         }
 
-        // Add‑ons
-        if (document.getElementById(`sdw-rebar-${idx}`).checked) total += area * rebarSurcharge;
-        if (document.getElementById(`sdw-drain-${idx}`).checked) total += drainFee;
-        if (document.getElementById(`sdw-grade-${idx}`).checked) total += area * gradingSurcharge;
+        // Minimum charge enforcement
+        if (total < minimumCharge) {
+          total = minimumCharge;
+        }
 
-        // Enforce minimum
-        if (total < minimumCharge) total = minimumCharge;
+        // Display
         costEl.innerText = `$${total.toFixed(2)}`;
 
-        // Confetti 🎉
-        const rect = costEl.getBoundingClientRect();
-        confetti({
-          particleCount: 40,
-          spread: 50,
-          origin: { x: (rect.left+rect.width/2)/window.innerWidth, y: (rect.top)/window.innerHeight }
-        });
+        // Confetti!
+        const rect = btn.getBoundingClientRect();
+        confetti({ particleCount: 50, spread: 60, origin: { x: (rect.left+rect.width/2)/window.innerWidth, y: (rect.top+rect.height/2)/window.innerHeight } });
       });
     });
   });
