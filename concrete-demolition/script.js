@@ -39,9 +39,9 @@ import confetti from 'canvas-confetti';
           <div class="cdm-field">
             <label for="cdm-thickness-${idx}">Slab Thickness:</label>
             <select id="cdm-thickness-${idx}">
-              <option value="4-6\"">4"–6"</option>
-              <option value="6-8\"">6"–8"</option>
-              <option value="8+\"">8"+</option>
+              <option value='4-6"'>4"–6"</option>
+              <option value='6-8"'>6"–8"</option>
+              <option value='8+"'>8"+</option>
             </select>
           </div>
 
